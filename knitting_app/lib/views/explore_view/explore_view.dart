@@ -20,6 +20,8 @@ class _SearchViewState extends State<ExploreView> {
             Text('Odevler'),
             Text('Fidan öğretmenimize sor'),
             Text('Yapay zekaya sor'),
+
+            
           ],
         ),
       ),

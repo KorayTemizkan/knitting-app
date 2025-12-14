@@ -21,9 +21,14 @@ class ProductView extends StatelessWidget {
                 title: Text(product.title),
               ),
             ),
+            ElevatedButton(onPressed: like, child: Text('Like')),
           ],
         ),
       ),
     );
+  }
+
+  void like() {
+    
   }
 }

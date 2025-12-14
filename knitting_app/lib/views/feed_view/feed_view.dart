@@ -53,8 +53,7 @@ class _FeedViewState extends State<FeedView> {
                   return Card(
                     child: ListTile(
                       onTap: () {
-                        context.go('/product',extra: p,
-                        );
+                        context.go('/product', extra: p);
                       },
 
                       leading: Image.network(
@@ -66,13 +65,35 @@ class _FeedViewState extends State<FeedView> {
 
                       title: Text(p.title),
                       subtitle: Text("${p.difficulty}, ${p.estimatedHour}"),
+
+                      
                     ),
                   );
                 },
               ),
             ),
 
+            SearchAnchor.bar(
+              suggestionsBuilder:
+                  (BuildContext context, SearchController controller) {
+                    final String input = controller.text.toLowerCase();
 
+                    return products
+                        .where(
+                          (item) => item.title.toLowerCase().contains(input),
+                        )
+                        .map(
+                          (filteredItem) => ListTile(
+                            title: Text(filteredItem.title),
+                            onTap: () {
+                              controller.closeView(filteredItem.title);
+                              context.go('/product', extra: filteredItem);
+                            },
+                          ),
+                        )
+                        .toList();
+                  },
+            ),
           ],
         ),
       ),
