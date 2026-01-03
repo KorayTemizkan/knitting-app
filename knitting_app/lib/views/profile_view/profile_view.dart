@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
 import 'package:knitting_app/controllers/providers/product_provider.dart';
 import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
@@ -113,6 +114,13 @@ class _ProfileViewState extends State<ProfileView> {
                 setState(() {});
               },
               child: const Text("İlk girisi ac!"),
+            ),
+
+            ElevatedButton(
+              child: const Text('Notlarım'),
+              onPressed: () {
+                context.push('/settings/notepad');
+              },
             ),
 
             ElevatedButton(

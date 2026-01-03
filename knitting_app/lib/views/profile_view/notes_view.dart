@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/providers/database_provider.dart';
+import 'package:knitting_app/controllers/providers/notes_provider.dart';
 import 'package:provider/provider.dart';
 
 class NotesView extends StatelessWidget {
@@ -8,44 +7,37 @@ class NotesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dbProvider = context.watch<DatabaseProvider>();
+    final provider = context.watch<NotesProvider>();
+
+    if (!provider.isInitialized || provider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return Scaffold(
-      appBar: const AppBarWidget(title: 'Notlarım'),
-      body: Builder(
-        builder: (context) {
-          if (dbProvider.isLoading || !dbProvider.isInitialized) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return FutureBuilder<List<Map<String, dynamic>>>(
-            future: dbProvider.notepadDatabase.query('notes', orderBy: 'id DESC'),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (snapshot.hasError) {
-                return Center(child: Text('Hata: ${snapshot.error}'));
-              }
-
-              final notes = snapshot.data ?? [];
-              if (notes.isEmpty) {
-                return const Center(child: Text('Henüz not yok'));
-              }
-
-              return ListView.builder(
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  final n = notes[index];
-                  return ListTile(
-                    title: Text(n['noteName']?.toString() ?? ''),
-                    subtitle: Text('id: ${n['id']}'),
-                  );
-                },
-              );
-            },
-          );
+      appBar: AppBar(title: const Text('Notlarım')),
+      body: provider.notes.isEmpty
+          ? const Center(child: Text('Henüz not yok'))
+          : ListView.builder(
+              itemCount: provider.notes.length,
+              itemBuilder: (_, i) {
+                final note = provider.notes[i];
+                return ListTile(
+                  title: Text(note.note),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      provider.deleteNote(note.id!);
+                    },
+                  ),
+                );
+              },
+            ),
+            
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          provider.addNote('Yeni not');
         },
+        child: const Icon(Icons.add),
       ),
     );
   }

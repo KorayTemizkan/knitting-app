@@ -12,6 +12,7 @@ import 'package:knitting_app/views/first_open_view.dart';
 import 'package:knitting_app/views/model_views/howTo_view.dart';
 import 'package:knitting_app/views/model_views/knitting_cafe_view.dart';
 import 'package:knitting_app/views/model_views/product_view.dart';
+import 'package:knitting_app/views/profile_view/notes_view.dart';
 import 'package:knitting_app/views/profile_view/profile_view.dart';
 import 'package:knitting_app/views/explore_view/explore_view.dart';
 import 'package:knitting_app/views/settings_view/about_us_view.dart';
@@ -40,6 +41,8 @@ class AppRoutes {
   static const String register = '/register';
   static const String firstOpen = '/firstOpen';
   static const String sss = '/sss';
+
+  static const String notepad = '/notepad';
 
   static const String product = 'product';
   static const String howTo = 'howTo';
@@ -179,6 +182,13 @@ StatefulShellRoute _bottomBar() {
           GoRoute(
             path: AppRoutes.profile,
             builder: (context, state) => const ProfileView(),
+
+            routes: [
+              GoRoute(
+                path: AppRoutes.notepad,
+                builder: (context, state) => NotesView(),
+              ),
+            ],
           ),
         ],
       ),

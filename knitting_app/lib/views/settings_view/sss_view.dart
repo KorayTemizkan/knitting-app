@@ -7,7 +7,7 @@ class SssView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(title: 'Bize gönder'),
+      appBar: AppBarWidget(title: 'Sık Sorulan Sorular'),
 
       body: Column(children: [Text('SSS!')]),
     );

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/providers/how_to_provider.dart';
+import 'package:knitting_app/controllers/providers/notes_provider.dart';
 import 'package:knitting_app/controllers/settings/music_controller.dart';
 import 'package:knitting_app/controllers/providers/product_provider.dart';
 import 'package:knitting_app/controllers/providers/theme_provider.dart';
@@ -12,7 +13,6 @@ import 'package:knitting_app/controllers/providers/shared_preferences_provider.d
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:knitting_app/controllers/providers/auth_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:knitting_app/controllers/providers/database_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 void main() async {
@@ -47,7 +47,7 @@ prefs.getStringList(...) gibi çağrılar yaptığında bellekteki Map'ten okur 
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProviderFirebase()),
         ChangeNotifierProvider(create: (_) => HowToProvider()),
-        ChangeNotifierProvider(create: (_) => DatabaseProvider()..initDatabase()),
+        ChangeNotifierProvider(create: (_) => NotesProvider()..init()),
       ],
       child: const MyApp(),
     ),

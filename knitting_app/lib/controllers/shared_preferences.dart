@@ -1,3 +1,6 @@
+// BU İKİ KATMAN BENİ ÇOK YORUYOR, TEK KATMANA DÜŞÜR
+
+
 // SharedPreferences nedir? Telefonun diskindeki kalıcı ayarları yönetir, basit düzeyde saklama yapabilir
 
 // Diskle doğrudan konuşur ve veri/okuma yazma işlemlerini asenkron yapar. UI veya başka bir katmanla ilgisi yoktur.

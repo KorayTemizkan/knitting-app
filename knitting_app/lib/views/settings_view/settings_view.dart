@@ -84,6 +84,13 @@ class _SettingsViewState extends State<SettingsView> {
                   },
                 ),
 
+                ListTile(
+                  title: const Text('Gizlilik Politikası'),
+                  onTap: () {
+                    
+                  },
+                ),
+
                 Divider(height: 5),
 
                 ListTile(

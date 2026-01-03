@@ -5,14 +5,12 @@ class Note {
   String title;
   String note;
   final int time;
-  final Image image;
 
   Note({
     required this.id,
     required this.title,
     required this.note,
     required this.time,
-    required this.image,
   });
 
   Map<String, Object?> toMap() {
@@ -21,12 +19,20 @@ class Note {
       'title': title,
       'note': note,
       'time': time,
-      'image': image,
     };
   }
 
-  @override
+  factory Note.fromMap(Map<String, dynamic> map) {
+    return Note(
+      id: map['id'] as int,
+      title: map['title'] as String,
+      note: map['note'] as String,
+      time: map['time'] as int,
+    );
+  }
+
+   @override
   String toString() {
-    return 'Note{id: $id, title: $title, note: $note, time: $time, image: $image,}';
+    return 'Note{id: $id, title: $title, note: $note, time: $time}';
   }
 }
