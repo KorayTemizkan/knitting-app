@@ -16,13 +16,19 @@ class _CommunityViewState extends State<CommunityView> {
       body: Center(
         child: Column(
           children: [
-            Text('Geliştiriyoruz!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 50,
-              fontWeight: FontWeight.bold,
-            ),
-            ),
+            /*
+            Bu kısımla ilgili düşüncelerim tam net değil ama şimdilik orta boyutta bir logomuzu buraya koyup yakında! uyarısı versek yeter sanırım.
+            
+            4 UNSUR OLUCAK
+            
+            Kişi ara kısmı olsun. istediğiniz kişiyi arayıp onun profil sayfasına gidebilelim
+
+            Productunu ekle , Gönderi yaz
+
+            Kişiler ve eserleri ( Yana kaydırmalık ) 
+
+            Gönderiler ( Aşağı kaydırmalık ), yanıtlama özelliği henüz yok, kaydetme olsun, beğenme olsun
+            */
           ],
         ),
       ),

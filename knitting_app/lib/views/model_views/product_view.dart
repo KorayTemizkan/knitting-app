@@ -71,8 +71,10 @@ ne zaman kullanalım :
             ),
 
             saveProduct(context),
-
+ 
             likeProduct(context),
+
+            // BURAYA GÖRÜNTÜLENME FONKSİYONU EKLEYECEĞİZ. KULLANICI HER BU SAYFAYI AÇTIĞINDA FİREBASE'E +1 SİNYAL YOLLAYACAĞIZ
           ],
         ),
       ),

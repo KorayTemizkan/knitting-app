@@ -26,9 +26,12 @@ class _SearchViewState extends State<ExploreView> {
       body: Center(
         child: Column(
           children: [
-            Text('ARAMA KISMINI WIDGET YAP VE ORTAK KULLANIMA AÇ, PRODUCTS İÇİN DE YANİ'),
-            Text('SQFLİTE İLE YEREL DEPOLAMA VE FİREBASE İLE YEDEKLEME YAP'),
-            Text('UYGULAMA İÇİNDEN YAZMA SEÇENEĞİ DE EKLE'),
+            // 4 UNSUR OLUCAK
+            // ARAMA KISMI
+            // PRODUCTS ( Yana kaydırmalık(hepsi listelenebilir ama 10 tanede 10 tane çekelim) + Tümünü göster diyip ayrı bir sayfaya da atabiliriz)
+            // HOWTOS ( Yana kaydırmalık + Yukarıdakinin aynısı)
+            // ARAÇLAR ( 4'lü grid olsun , Yapay zekaya sor, WP üzerinden bize yaz, Not al, SSS)
+
 
             TextField(
               controller: messageController,

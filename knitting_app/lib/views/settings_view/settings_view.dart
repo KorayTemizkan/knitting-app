@@ -29,6 +29,18 @@ class _SettingsViewState extends State<SettingsView> {
           Expanded(
             child: ListView(
               children: [
+                /*
+                AÇIK/KOYU TEMA
+                BİZ KİMİZ? + Fidan ve beni tanıtan görsellerle ve YT videosuyla süslenmiş bir sayfa
+                BİZE SOR + Burada explore sayfasındaki fonksiyonun aynısını ekliyoruz WP DESTEK HATTI YANİ
+                GİRİŞ YAP, KAYDOL, HESABIMI SİL
+                SIK SORULAN SORULAR
+                GİZLİLİK POLİTİKASI, KULLANIM KOŞULLARI
+                DİL SEÇİMİ YAP + Şİmdilik sadece Türkçe
+                BİZİ PUANLA ile play store sayfa linkimize gidiyoruz
+                MÜZİK KONTROLCÜSÜ
+                */
+
                 ListTile(
                   title: const Text('Dark Theme'),
                   trailing: Switch(

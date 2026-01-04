@@ -1,3 +1,5 @@
+// Video yükleniyor animasyonu
+
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

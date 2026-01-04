@@ -25,12 +25,26 @@ class _FeedViewState extends State<FeedView> {
       body: Center(
         child: Column(
           children: [
-            _SearchAnchorBar(products),
-            
-            Text('İLK İNDİRMEDE BAZI SORULAR SORMA KISMI'),
-            Text('kullanıcıya özel selamlama widgeti + streak + hedef takibi'), // SP içine ekle
-            Text('odevler'),         // başlangıça seçilen diffuculty'ye göre sırasıyla product önerelim sırasıyla, ürünü bitir, fotoğrafını bize yolla. onaylarsak olsun.
-                                     // düzeye göre bu herkese atansın, örneğin df 1 düzeyinde 15 tane
+            // ŞİMDİLİK UYGULAMADA SADECE FİDAN VE ÖRGÜLERİ OLUCAK. TOPLULUĞA AÇIK HALE DAHA SONRA GETİRİCEM
+            // Yana kaydırmalık ya da aşağı kaydırmalık dediklerim var ya, oralara ok ekleyelim
+            // PRODUCTS LİSTESİNİ EXPLORE KISMINA TAŞI. ARAMA FONKSİYONUNU ORTAK KULLANIMA AÇ
+            // 6 UNSUR OLUCAK
+
+            // MERHABA KORAY, 10 GÜNDÜR BİZİMLESİN,  SP içine ekle ve
+
+            //_SearchAnchorBar(products),
+
+            // FİDAN ÖĞRETMEN'DEN ÖDEVLER SERİSİ, YAPILAN ÖDEV SAYISI 7/22 ( Yana kaydırmalık ) başlangıça seçilen diffuculty'ye göre sırasıyla product önerelim sırasıyla, ürünü bitir, fotoğrafını bize yolla. onaylarsak olsun.düzeye göre bu herkese atansın, örneğin df 1 düzeyinde 15 tane, df 2 düzeyinde 7 tane, herkese toplam 22
+                    
+            // YENİ EKLENENLER ( Yana kaydırmalık)
+
+            // KNİTTİNG CAFELERİ KEŞFET ( Yana kaydırmalık )
+
+            // EN ÇOK BEĞENİLEN/FAVORİLENEN PRODUCTS KISMI OLSUN, AKIŞ GİBİ( Aşağı kaydırmalık 4'lü grid), BURAYI EKLE, ANALYTİCS, 
+
+
+
+
             Expanded(
               child: ListView.builder(
                 itemCount: products.length,

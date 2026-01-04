@@ -11,8 +11,9 @@ class ProductModel {
   final List<String> colors;
   final String yarnType;   // ip türü
   final String hookSize;   // Tığ numarası
-  final String imageUrl;
+  final String imageUrl;   // HER BİR GÖRSELİN BOYUT AYARLAMASINI UI TARAFINDA YAP
   // BURAYA URUN VIDEO LINKI EKLEYECEGIZ
+  // EKLENME TARİHİ
 
   ProductModel({
     required this.id,

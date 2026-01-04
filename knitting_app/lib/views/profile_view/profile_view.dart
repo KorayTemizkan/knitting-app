@@ -77,6 +77,13 @@ class _ProfileViewState extends State<ProfileView> {
       body: Center(
         child: Column(
           children: [
+            // 4 UNSUR OLUCAK
+
+            // PROFİL
+            // KAYDEDİLENLER ( Yana kaydırmalık + yine tam ekrana alma seçeneği olabilir)
+            // BEĞENİLENLER ( Yana kaydırmalık +)
+            // NOTLARIM ( Yana kaydırmalık +)
+
             Text('KULLANICI BILGILERI'),
             Text(auth.email ?? 'Giris yapilmadi'),
             Text(auth.uid ?? 'ID yok'),
