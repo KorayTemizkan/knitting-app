@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/providers/how_to_provider.dart';
+import 'package:knitting_app/controllers/providers/product_provider.dart';
 import 'package:knitting_app/controllers/url_launcher_controller.dart';
+import 'package:knitting_app/controllers/widgets/generic_search_anchor_bar.dart';
+import 'package:knitting_app/models/how_to_model.dart';
+import 'package:knitting_app/models/product_model.dart';
+import 'package:knitting_app/models/searchable_model.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ExploreView extends StatefulWidget {
   const ExploreView({super.key});
@@ -18,8 +22,8 @@ class _SearchViewState extends State<ExploreView> {
 
   @override
   Widget build(BuildContext context) {
-    final howToProvider = Provider.of<HowToProvider>(context);
-    final howTos = howToProvider.howTos;
+    final howTos = context.watch<HowToProvider>().howTos;
+    final products = context.watch<ProductProvider>().products;
 
     return Scaffold(
       appBar: AppBarWidget(title: 'Keşfet'),
@@ -31,23 +35,51 @@ class _SearchViewState extends State<ExploreView> {
             // PRODUCTS ( Yana kaydırmalık(hepsi listelenebilir ama 10 tanede 10 tane çekelim) + Tümünü göster diyip ayrı bir sayfaya da atabiliriz)
             // HOWTOS ( Yana kaydırmalık + Yukarıdakinin aynısı)
             // ARAÇLAR ( 4'lü grid olsun , Yapay zekaya sor, WP üzerinden bize yaz, Not al, SSS)
+            GenericSearchAnchorBar<Searchable>(
+              items: [...products, ...howTos],
+              hintText: 'Ara...',
+              onItemSelected: (item) {
+                if (item is ProductModel) {
+                  context.go('/products', extra: item);
+                } else if (item is HowToModel) {
+                  context.go('/howTo', extra: item);
+                }
+              },
+            ),
 
+            Divider(height: 50, thickness: 15, color: Colors.amber),
 
-            TextField(
-              controller: messageController,
-              decoration: InputDecoration(
-                labelText: 'Mesaj',
-                border: OutlineInputBorder(),
+            Text('PRODUCTS'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final p = products[index];
+
+                  return Card(
+                    child: ListTile(
+                      onTap: () {
+                        context.go('/product', extra: p);
+                      },
+
+                      leading: Image.network(
+                        p.imageUrl,
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      ),
+
+                      title: Text(p.title),
+                      subtitle: Text("${p.difficulty}, ${p.estimatedHour}"),
+                    ),
+                  );
+                },
               ),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                openWhatsAppSupport(message: messageController.text);
-              },
-              child: Text('Fidan Öğretmen\'imize sor'),
-            ),
+            Divider(height: 50, thickness: 15, color: Colors.amber),
 
+            Text('HOWTOS'),
             Expanded(
               child: ListView.builder(
                 itemCount: howTos.length,
@@ -75,10 +107,24 @@ class _SearchViewState extends State<ExploreView> {
               ),
             ),
 
-            Text(
-              'Yapay Zeka\'ya sor bölümümüzü geliştiriyoruz!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            Divider(height: 50, thickness: 15, color: Colors.amber),
+            
+            Text('Araçlar'),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 4,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () {
+                      openWhatsAppSupport();
+                    },
+                    child: Text('Fidan Öğretmen\'imize sor'),
+                  ),
+                  Text('Yapay zekaya sor'),
+                  Text('SSS'),
+                  Text('Not al'),
+                ],
+              ),
             ),
           ],
         ),

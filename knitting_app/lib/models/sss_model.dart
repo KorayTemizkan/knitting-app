@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class SSSModel {
   final int title;
   final String shortening1;

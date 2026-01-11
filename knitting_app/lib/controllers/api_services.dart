@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:knitting_app/models/how_to_model.dart';
+import 'package:knitting_app/models/knitting_cafe_model.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:knitting_app/models/product_model.dart';
@@ -35,7 +36,25 @@ Future<List<HowToModel>> fetchHowTos() async {
     return jsonList.map((item) => HowToModel.fromMap(item)).toList();
   } else {
     throw Exception(
-      'Failed to load howtos. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',
+      'Failed to load howTos. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',
+    );
+  }
+}
+
+Future<List<KnittingCafeModel>> fetchKnittingCafes() async {
+  final response = await http.get(
+    Uri.parse(
+      'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/knittingCafes.json',
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    final List<dynamic> jsonList = jsonDecode(response.body);
+
+    return jsonList.map((item) => KnittingCafeModel.fromMap(item)).toList();
+  } else {
+    throw Exception(
+      'Failed to load knittingCafes. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',
     );
   }
 }

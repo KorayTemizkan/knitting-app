@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
+import 'package:knitting_app/controllers/providers/notes_provider.dart';
 import 'package:knitting_app/controllers/providers/product_provider.dart';
 import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
+import 'package:knitting_app/models/note_model.dart';
 import 'package:knitting_app/models/product_model.dart';
 import 'package:provider/provider.dart';
 import 'package:knitting_app/controllers/providers/auth_provider.dart';
@@ -17,7 +18,9 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   List<int> savedIds = [];
+  List<Note> notes = [];
   String? photoPath;
+  final TextEditingController _noteController = TextEditingController();
 
   @override
   void initState() {
@@ -61,7 +64,9 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     final products = context.watch<ProductProvider>().products;
-    final auth = context.watch<AuthProviderFirebase>();
+    final authProvider = context.watch<AuthProviderFirebase>();
+    final notesProvider = context.watch<NotesProvider>();
+    notes = notesProvider.notes;
 
     if (products.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -83,10 +88,9 @@ class _ProfileViewState extends State<ProfileView> {
             // KAYDEDİLENLER ( Yana kaydırmalık + yine tam ekrana alma seçeneği olabilir)
             // BEĞENİLENLER ( Yana kaydırmalık +)
             // NOTLARIM ( Yana kaydırmalık +)
-
             Text('KULLANICI BILGILERI'),
-            Text(auth.email ?? 'Giris yapilmadi'),
-            Text(auth.uid ?? 'ID yok'),
+            Text(authProvider.email ?? 'Giris yapilmadi'),
+            Text(authProvider.uid ?? 'ID yok'),
 
             photoPath != null
                 ? Image.file(
@@ -124,20 +128,58 @@ class _ProfileViewState extends State<ProfileView> {
             ),
 
             ElevatedButton(
-              child: const Text('Notlarım'),
-              onPressed: () {
-                context.push('/settings/notepad');
-              },
-            ),
-
-            ElevatedButton(
               onPressed: () async {
-                auth.signOut();
+                authProvider.signOut();
               },
               child: Text('Cikis yap!'),
             ),
 
+            Divider(height: 50, thickness: 15, color: Colors.amber),
+
+            Text('Kaydedilenler'),
             SavedProducts(savedProducts),
+
+            Divider(height: 50, thickness: 15, color: Colors.amber),
+
+            Text('Beğenilenler'),
+            SavedProducts(savedProducts),
+
+            Divider(height: 50, thickness: 15, color: Colors.amber),
+
+            TextField(
+              controller: _noteController,
+              decoration: InputDecoration(
+                labelText: 'Note',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: null,
+            ),
+
+            ElevatedButton(
+              onPressed: () async {
+                await notesProvider.addNote(_noteController.text);
+              },
+
+              child: const Text('Not ekle'),
+            ),
+            /*
+            Expanded(
+              child: ListView.builder(
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  final n = notes[index];
+              
+                  return Card(
+                    child: ListTile(
+                      title: Text(n.note),
+                      subtitle: Text('${n.id}, ${n.time}'),
+              
+                    ),
+                  );
+                },
+              ),
+            ),
+            */
           ],
         ),
       ),

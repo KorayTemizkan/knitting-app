@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Note {
   final int id;
   String title;
@@ -21,7 +19,7 @@ class Note {
       'time': time,
     };
   }
-
+  /*
   factory Note.fromMap(Map<String, dynamic> map) {
     return Note(
       id: map['id'] as int,
@@ -30,7 +28,7 @@ class Note {
       time: map['time'] as int,
     );
   }
-
+  */
    @override
   String toString() {
     return 'Note{id: $id, title: $title, note: $note, time: $time}';

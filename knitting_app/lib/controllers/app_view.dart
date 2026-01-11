@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:knitting_app/controllers/app_bar.dart';
 
 class AppView extends StatelessWidget {
   final StatefulNavigationShell navigationShell;

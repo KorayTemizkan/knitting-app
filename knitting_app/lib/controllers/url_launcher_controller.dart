@@ -14,13 +14,13 @@ Future<void> openYoutubeVideo(String videoId) async {
   }
 }
 
-Future<void> openWhatsAppSupport({required String message}) async {
+Future<void> openWhatsAppSupport() async {
   final phone = dotenv.env['SUPPORT_WHATSAPP_NUMBER'];
   if (phone == null || phone.isEmpty) {
     throw Exception('SUPPORT_WHATSAPP_NUMBER .env içinde yok!');
   }
   final uri = Uri.parse(
-    'https://wa.me/$phone?text=${Uri.encodeComponent(message)}',
+    'https://wa.me/$phone?',
   );
 
   if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {

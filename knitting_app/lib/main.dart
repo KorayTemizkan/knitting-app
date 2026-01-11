@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/providers/how_to_provider.dart';
+import 'package:knitting_app/controllers/providers/knitting_cafe_provider.dart';
 import 'package:knitting_app/controllers/providers/notes_provider.dart';
-import 'package:knitting_app/controllers/settings/music_controller.dart';
 import 'package:knitting_app/controllers/providers/product_provider.dart';
 import 'package:knitting_app/controllers/providers/theme_provider.dart';
 import 'package:knitting_app/controllers/router.dart';
@@ -13,7 +13,6 @@ import 'package:knitting_app/controllers/providers/shared_preferences_provider.d
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:knitting_app/controllers/providers/auth_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:sqflite/sqflite.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +47,7 @@ prefs.getStringList(...) gibi çağrılar yaptığında bellekteki Map'ten okur 
         ChangeNotifierProvider(create: (_) => AuthProviderFirebase()),
         ChangeNotifierProvider(create: (_) => HowToProvider()),
         ChangeNotifierProvider(create: (_) => NotesProvider()..init()),
+        ChangeNotifierProvider(create: (_) => KnittingCafeProvider()),
       ],
       child: const MyApp(),
     ),
@@ -72,6 +72,7 @@ class _MyAppState extends State<MyApp> {
           .loadProducts(); // widget ağacı oluşturulduğunda sadece tek bir kere verileri internetten çekiyoruz ve yetiyor
 
       context.read<HowToProvider>().loadHowTos();
+      context.read<KnittingCafeProvider>().loadKnittingCafes();
     });
   }
 

@@ -44,7 +44,7 @@ class NotesProvider extends ChangeNotifier {
     if (_db == null) return;
 
     final data = await _db!.query('notes', orderBy: 'id DESC');
-    _notes = data.map((e) => Note.fromMap(e)).toList();
+    //_notes = data.map((e) => Note.fromMap(e)).toList();
     notifyListeners();
   }
 

@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:knitting_app/models/searchable_model.dart';
 
 /* 
 Örneğin bir ayıcık gibi düşün, bunun videosu olucak ama tanıtım videosu gibi düşün. baştan sona aşamalar olmayacak
 */
-class ProductModel { 
+class ProductModel implements Searchable { 
   final int id;
   final String title;
   final String difficulty;
@@ -58,4 +58,11 @@ class ProductModel {
   String toString() {
     return 'ProductModel{id: $id, title: $title, difficulty: $difficulty, estimatedHour: $estimatedHour}';
   }
+
+  // Searchable implementation
+  @override
+  String get searchableText => title;
+
+  @override
+  String? get searchableSubtitle => '$difficulty • $estimatedHour';
 }

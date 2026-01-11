@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:knitting_app/models/searchable_model.dart';
 
-// Bunu mesela düğüm atmak gibi düşün, videosu da olucak fotoğrafı da 
-class HowToModel { 
+// Bunu mesela düğüm atmak gibi düşün, videosu da olucak fotoğrafı da
+class HowToModel implements Searchable   {
   final int id;
   final String title;
   final String difficulty;
@@ -55,4 +55,10 @@ class HowToModel {
   String toString() {
     return 'HowTo{id: $id, title: $title, difficulty: $difficulty, estimatedHour: $estimatedHour}';
   }
+
+  @override
+  String get searchableText => title;
+
+  @override
+  String? get searchableSubtitle => '$difficulty • $estimatedHour';
 }

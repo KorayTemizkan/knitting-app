@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:knitting_app/models/searchable_model.dart';
 
-class KnittingCafeModel {
+class KnittingCafeModel implements Searchable {
   final int id;
   final String name;
   final String address;
@@ -46,4 +46,11 @@ class KnittingCafeModel {
   String toString() {
     return 'KnittingCafe{id: $id, name: $name, address: $address}';
   }
+
+  // Searchable implementation
+  @override
+  String get searchableText => name;
+
+  @override
+  String? get searchableSubtitle => address;
 }

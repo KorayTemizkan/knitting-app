@@ -40,7 +40,6 @@ class _SettingsViewState extends State<SettingsView> {
                 BİZİ PUANLA ile play store sayfa linkimize gidiyoruz
                 MÜZİK KONTROLCÜSÜ
                 */
-
                 ListTile(
                   title: const Text('Dark Theme'),
                   trailing: Switch(
@@ -61,7 +60,7 @@ class _SettingsViewState extends State<SettingsView> {
                 ),
 
                 Divider(height: 5),
-                
+
                 ListTile(
                   title: const Text('Bize sor!'),
                   onTap: () {
@@ -96,11 +95,11 @@ class _SettingsViewState extends State<SettingsView> {
                   },
                 ),
 
+                Divider(height: 5),
+
                 ListTile(
                   title: const Text('Gizlilik Politikası'),
-                  onTap: () {
-                    
-                  },
+                  onTap: () {},
                 ),
 
                 Divider(height: 5),
@@ -110,18 +109,29 @@ class _SettingsViewState extends State<SettingsView> {
                   trailing: DropdownButton<String>(
                     value: selectedLanguage,
                     items: const [
-                      DropdownMenuItem(value: 'TR', child: Text('Türkçe (Şimdilik tek dil!)')),
-                      DropdownMenuItem(value: 'AZ', child: Text('Azerbaycan Dili (Yakında!)')),
+                      DropdownMenuItem(
+                        value: 'TR',
+                        child: Text('Türkçe (Şimdilik tek dil!)'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'AZ',
+                        child: Text('Azerbaycan Dili (Yakında!)'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'AZ',
+                        child: Text('İngilizce (Yakında!)'),
+                      ),
                     ],
 
                     onChanged: (value) {
-                      setState(() { // ekranı yeniden çizdirir, sürekli hatırlatmaktan yoruldum
+                      setState(() {
+                        // ekranı yeniden çizdirir, sürekli hatırlatmaktan yoruldum
                         selectedLanguage = value!;
                       });
                     },
                   ),
                 ),
-                
+
                 Divider(height: 5),
 
                 ListTile(
