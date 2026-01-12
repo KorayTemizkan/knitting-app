@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
+import 'package:knitting_app/controllers/providers/notes_provider.dart';
 import 'package:knitting_app/controllers/router.dart';
 import 'package:knitting_app/controllers/settings/music_controller.dart';
 import 'package:knitting_app/controllers/providers/theme_provider.dart';
@@ -40,8 +41,17 @@ class _SettingsViewState extends State<SettingsView> {
                 BİZİ PUANLA ile play store sayfa linkimize gidiyoruz
                 MÜZİK KONTROLCÜSÜ
                 */
+                /*
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<NotesProvider>().deleteDatabaseFile();
+                  },
+                  child: Text('Veritabanını sil'),
+                ),
+                */
+
                 ListTile(
-                  title: const Text('Dark Theme'),
+                  title: const Text('Koyu Tema'),
                   trailing: Switch(
                     value: context.watch<ThemeProvider>().isDark,
                     onChanged: (value) {
@@ -71,7 +81,7 @@ class _SettingsViewState extends State<SettingsView> {
                 Divider(height: 5),
 
                 ListTile(
-                  title: const Text('Giris yap!'),
+                  title: const Text('Giriş yap!'),
                   onTap: () {
                     context.push('/settings/signIn');
                   },
@@ -89,15 +99,6 @@ class _SettingsViewState extends State<SettingsView> {
                 Divider(height: 5),
 
                 ListTile(
-                  title: const Text('SSS'),
-                  onTap: () {
-                    context.push('/settings/SSS');
-                  },
-                ),
-
-                Divider(height: 5),
-
-                ListTile(
                   title: const Text('Gizlilik Politikası'),
                   onTap: () {},
                 ),
@@ -105,7 +106,7 @@ class _SettingsViewState extends State<SettingsView> {
                 Divider(height: 5),
 
                 ListTile(
-                  title: const Text('Dil secimi yap'),
+                  title: const Text('Dil seçimi yap'),
                   trailing: DropdownButton<String>(
                     value: selectedLanguage,
                     items: const [

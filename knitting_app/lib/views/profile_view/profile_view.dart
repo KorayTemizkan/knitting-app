@@ -20,6 +20,7 @@ class _ProfileViewState extends State<ProfileView> {
   List<int> savedIds = [];
   List<Note> notes = [];
   String? photoPath;
+  final TextEditingController _noteTitleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
   @override
@@ -88,50 +89,60 @@ class _ProfileViewState extends State<ProfileView> {
             // KAYDEDİLENLER ( Yana kaydırmalık + yine tam ekrana alma seçeneği olabilir)
             // BEĞENİLENLER ( Yana kaydırmalık +)
             // NOTLARIM ( Yana kaydırmalık +)
-            Text('KULLANICI BILGILERI'),
-            Text(authProvider.email ?? 'Giris yapilmadi'),
-            Text(authProvider.uid ?? 'ID yok'),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 4,
+                children: <Widget>[
+                  Text('KULLANICI BILGILERI'),
+                  Text(authProvider.email ?? 'Giris yapilmadi'),
+                  Text(authProvider.uid ?? 'ID yok'),
 
-            photoPath != null
-                ? Image.file(
-                    File(photoPath!),
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.cover,
-                  )
-                : const CircleAvatar(radius: 60, child: Icon(Icons.person)),
+                  photoPath != null
+                      ? Image.file(
+                          File(photoPath!),
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        )
+                      : const CircleAvatar(
+                          radius: 60,
+                          child: Icon(Icons.person),
+                        ),
 
-            ElevatedButton(
-              onPressed: () async {
-                await context
-                    .read<SharedPreferencesProvider>()
-                    .pickProfileImage();
+                  ElevatedButton(
+                    onPressed: () async {
+                      await context
+                          .read<SharedPreferencesProvider>()
+                          .pickProfileImage();
 
-                setState(() {
-                  photoPath = context
-                      .read<SharedPreferencesProvider>()
-                      .profilePhoto;
-                });
-              },
-              child: const Text("Profil fotografi koy!"),
-            ),
+                      setState(() {
+                        photoPath = context
+                            .read<SharedPreferencesProvider>()
+                            .profilePhoto;
+                      });
+                    },
+                    child: const Text("Profil fotografi koy!"),
+                  ),
 
-            ElevatedButton(
-              onPressed: () async {
-                await context
-                    .read<SharedPreferencesProvider>()
-                    .finishSetFirstOpeningTrue();
+                  ElevatedButton(
+                    onPressed: () async {
+                      await context
+                          .read<SharedPreferencesProvider>()
+                          .finishSetFirstOpeningTrue();
 
-                setState(() {});
-              },
-              child: const Text("İlk girisi ac!"),
-            ),
+                      setState(() {});
+                    },
+                    child: const Text("İlk girisi ac!"),
+                  ),
 
-            ElevatedButton(
-              onPressed: () async {
-                authProvider.signOut();
-              },
-              child: Text('Cikis yap!'),
+                  ElevatedButton(
+                    onPressed: () async {
+                      authProvider.signOut();
+                    },
+                    child: Text('Cikis yap!'),
+                  ),
+                ],
+              ),
             ),
 
             Divider(height: 50, thickness: 15, color: Colors.amber),
@@ -147,9 +158,18 @@ class _ProfileViewState extends State<ProfileView> {
             Divider(height: 50, thickness: 15, color: Colors.amber),
 
             TextField(
+              controller: _noteTitleController,
+              decoration: InputDecoration(
+                labelText: 'Başlık',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: null,
+            ),
+
+            TextField(
               controller: _noteController,
               decoration: InputDecoration(
-                labelText: 'Note',
+                labelText: 'Not',
                 border: OutlineInputBorder(),
               ),
               maxLines: null,
@@ -157,29 +177,30 @@ class _ProfileViewState extends State<ProfileView> {
 
             ElevatedButton(
               onPressed: () async {
-                await notesProvider.addNote(_noteController.text);
+                await notesProvider.addNote(
+                  _noteTitleController.text,
+                  _noteController.text,
+                );
               },
 
               child: const Text('Not ekle'),
             ),
-            /*
+
             Expanded(
               child: ListView.builder(
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
                   final n = notes[index];
-              
+
                   return Card(
                     child: ListTile(
                       title: Text(n.note),
                       subtitle: Text('${n.id}, ${n.time}'),
-              
                     ),
                   );
                 },
               ),
             ),
-            */
           ],
         ),
       ),

@@ -9,10 +9,10 @@ import 'package:knitting_app/models/product_model.dart';
 import 'package:knitting_app/views/community_view/community_view.dart';
 import 'package:knitting_app/views/feed_view/feed_view.dart';
 import 'package:knitting_app/views/first_open_view.dart';
+import 'package:knitting_app/views/model_views/ai_view.dart';
 import 'package:knitting_app/views/model_views/howTo_view.dart';
 import 'package:knitting_app/views/model_views/knitting_cafe_view.dart';
 import 'package:knitting_app/views/model_views/product_view.dart';
-import 'package:knitting_app/views/profile_view/notes_view.dart';
 import 'package:knitting_app/views/profile_view/profile_view.dart';
 import 'package:knitting_app/views/explore_view/explore_view.dart';
 import 'package:knitting_app/views/settings_view/about_us_view.dart';
@@ -41,6 +41,7 @@ class AppRoutes {
   static const String register = '/register';
   static const String firstOpen = '/firstOpen';
   static const String sss = '/sss';
+  static const String ai = '/ai';
 
   static const String notepad = '/notepad';
 
@@ -165,6 +166,11 @@ StatefulShellRoute _bottomBar() {
                   return HowToView(howTo: howTo);
                 },
               ),
+
+              GoRoute(
+                path: AppRoutes.ai,
+                builder: (context, state) => AiView(),
+              ),
             ],
           ),
         ],
@@ -184,13 +190,6 @@ StatefulShellRoute _bottomBar() {
           GoRoute(
             path: AppRoutes.profile,
             builder: (context, state) => const ProfileView(),
-
-            routes: [
-              GoRoute(
-                path: AppRoutes.notepad,
-                builder: (context, state) => NotesView(),
-              ),
-            ],
           ),
         ],
       ),

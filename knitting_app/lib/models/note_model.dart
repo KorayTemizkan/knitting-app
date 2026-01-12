@@ -2,7 +2,7 @@ class Note {
   final int id;
   String title;
   String note;
-  final int time;
+  final DateTime time;
 
   Note({
     required this.id,
@@ -16,19 +16,19 @@ class Note {
       'id': id,
       'title': title,
       'note': note,
-      'time': time,
+      'time': time.millisecondsSinceEpoch,
     };
   }
-  /*
+  
   factory Note.fromMap(Map<String, dynamic> map) {
     return Note(
       id: map['id'] as int,
       title: map['title'] as String,
       note: map['note'] as String,
-      time: map['time'] as int,
+      time: DateTime.fromMicrosecondsSinceEpoch(map['time'] as int),
     );
   }
-  */
+  
    @override
   String toString() {
     return 'Note{id: $id, title: $title, note: $note, time: $time}';

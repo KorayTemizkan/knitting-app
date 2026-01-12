@@ -27,7 +27,9 @@ class NotesProvider extends ChangeNotifier {
         await db.execute('''
           CREATE TABLE notes(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            noteName TEXT
+            title TEXT,
+            note TEXT,
+            time INTEGER
           )
           ''');
       },
@@ -44,15 +46,19 @@ class NotesProvider extends ChangeNotifier {
     if (_db == null) return;
 
     final data = await _db!.query('notes', orderBy: 'id DESC');
-    //_notes = data.map((e) => Note.fromMap(e)).toList();
+    _notes = data.map((e) => Note.fromMap(e)).toList();
     notifyListeners();
   }
 
   /// 3️⃣ CREATE
-  Future<void> addNote(String text) async {
+  Future<void> addNote(String title, String note) async {
     if (_db == null) return;
 
-    await _db!.insert('notes', {'noteName': text});
+    await _db!.insert('notes', {
+      'title': title,
+      'note': note,
+      'time': DateTime.now().millisecondsSinceEpoch,
+    });
     await loadNotes();
   }
 
@@ -62,5 +68,17 @@ class NotesProvider extends ChangeNotifier {
 
     await _db!.delete('notes', where: 'id = ?', whereArgs: [id]);
     await loadNotes();
+  }
+
+  Future<void> deleteDatabaseFile() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'notes.db');
+
+    await deleteDatabase(path);
+    _db = null;
+    _initialized = false;
+    _notes = [];
+
+    notifyListeners();
   }
 }

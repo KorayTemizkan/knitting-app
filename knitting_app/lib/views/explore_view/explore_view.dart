@@ -108,11 +108,11 @@ class _SearchViewState extends State<ExploreView> {
             ),
 
             Divider(height: 50, thickness: 15, color: Colors.amber),
-            
+
             Text('Araçlar'),
             Expanded(
               child: GridView.count(
-                crossAxisCount: 4,
+                crossAxisCount: 2,
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () {
@@ -120,9 +120,13 @@ class _SearchViewState extends State<ExploreView> {
                     },
                     child: Text('Fidan Öğretmen\'imize sor'),
                   ),
-                  Text('Yapay zekaya sor'),
-                  Text('SSS'),
-                  Text('Not al'),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/search/ai');
+                    },
+                    child: Text('Yapay Zekaya Sor'),
+                  ),
                 ],
               ),
             ),

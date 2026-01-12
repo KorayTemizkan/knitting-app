@@ -26,7 +26,7 @@ class AppView extends StatelessWidget {
 
               index: 0,
               currentIndex: navigationShell.currentIndex,
-              label: 'Feed',
+              label: 'Ana Sayfa',
               icon: Icons.feed,
             ),
 
@@ -35,7 +35,7 @@ class AppView extends StatelessWidget {
 
               index: 1,
               currentIndex: navigationShell.currentIndex,
-              label: 'Explore',
+              label: 'Atölye',
               icon: Icons.explore,
             ),
 
@@ -44,7 +44,7 @@ class AppView extends StatelessWidget {
 
               index: 2,
               currentIndex: navigationShell.currentIndex,
-              label: 'Community',
+              label: 'Topluluk',
               icon: Icons.escalator_sharp,
             ),
 
@@ -53,7 +53,7 @@ class AppView extends StatelessWidget {
 
               index: 3,
               currentIndex: navigationShell.currentIndex,
-              label: 'Profile',
+              label: 'Profil',
               icon: Icons.home,
             ),
             
