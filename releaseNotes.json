@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3,
+    "version": "1.3.0",
+    "date": "2026-01-15",
+    "notes": [
+      "Row counter eklendi",
+      "Offline desen desteği",
+      "Performans iyileştirmeleri"
+    ]
+  },
+  {
+    "id": 2,
+    "version": "1.2.1",
+    "date": "2026-01-03",
+    "notes": [
+      "Küçük hata düzeltmeleri"
+    ]
+  }
+]
