@@ -1,47 +1,49 @@
 TIGCIK (Knitting App)
 
-Tığcık, örgü ve amigurumi severler için geliştirilen bir Flutter mobil uygulamasıdır.
-Uygulama; kullanıcıların örgü tariflerini keşfetmesini, kaydetmesini ve öğrenme
-sürecini daha keyifli ve erişilebilir hâle getirmeyi amaçlar.
+Tığcık, örgüseverler için geliştirilen bir Flutter tabanlı mobil uygulamadır.
+Uygulama; kullanıcıların örgü tariflerini keşfetmesini, kaydetmesini ve öğrenme sürecini daha keyifli ve erişilebilir hâle getirmesini amaçlamaktadır.
+Ayrıca sosyal medya özellikleri sayesinde kullanıcıların birbirleriyle etkileşime geçmesini sağlayarak uygulama deneyimini daha eğlenceli ve sürdürülebilir kılar. 
 
+İÇERİKLER
 
-OZELLIKLER
-
-- Örgü ve amigurumi tariflerini listeleme
-- Arama, filtreleme ve keşfetme
-- Tarif detay sayfası
-- Zorluk seviyesi ve tahmini süre bilgileri
-- Arka plan müziği (oynat / durdur / ses ayarı)
-- Açık / koyu tema
-- Dil desteği (Türkçe, Azerbaycan Türkçesi planlanıyor)
-- Çevrimdışı kullanım desteği
+    Kaydol/Giriş yap sistemi
+    Örgü ve amigurumi tariflerini listeleme
+    Arama, filtreleme ve keşfetme
+    Tariflerin detay sayfası
+    Örgü kafeler ve detay sayfası
+    WhatsApp üzerinden Fidan'a soru sor
+    Yapay Zeka ile soru-cevap 
+    Sosyal medya etkileşimleri
+    Profil yönetimi
+    Beğenilenler/kaydedilenler
+    Not alma/listeleme
+    Müzik kontrolcüsü
+    Açık / koyu tema
+    Biz kimiz? Bize sor Gizlilik politikası, Bizi puanla,
+    Dil desteği (Türkçe var. Azerbaycan Dili ve İngilizce yakında eklenecek.)
+    Çevrimdışı kullanım desteği
 
 
 KULLANILAN TEKNOLOJILER
 
-- Flutter & Dart
-- Provider (state management)
-- GoRouter (sayfa yönlendirme)
-- SharedPreferences (kalıcı ayarlar)
-- just_audio (arka plan müziği)
-- youtube_player_flutter (dahili video oynatıcı)
-- GitHub JSON (uzaktan veri kaynağı)
-- Firebase Authentication + Storage + Firestore
-
-
-
-PROJENIN AMACI
-
-Bu proje, Flutter ile:
-- temiz mimari,
-- state yönetimi,
-- uygulama genelinde veri paylaşımı,
-- çevrimdışı kullanım
-
-konularını pratik etmek amacıyla geliştirilmektedir.
-
+    Flutter & Dart
+    Provider (state management)
+    GoRouter (sayfa yönlendirme)
+    SharedPreferences (kalıcı ayarlar)
+    just_audio (arka plan müziği ve kontrolcüsü)
+    youtube_player_flutter (dahili video oynatıcı)*
+    GitHub JSON (uzaktan veri kaynağı)
+    url_launcher (uygulama yönlendirme)
+    dotenv (gizli dosyalama)
+    sqflite (SQLite ile yerelde depolama)
+    path ve image_picker (yerelden dosya yükleme işlemi)
+    Supabase (sosyal medya içerikleri)
 
 GELISTIRICI
 
 Koray Temizkan
 Bilgisayar Muhendisligi Ogrencisi & Flutter Developer
+
+## License
+This project is licensed under All Rights Reserved.
+Unauthorized use, reproduction or distribution is prohibited.
