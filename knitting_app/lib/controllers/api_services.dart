@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:knitting_app/models/contest_model.dart';
 import 'package:knitting_app/models/how_to_model.dart';
 import 'package:knitting_app/models/knitting_cafe_model.dart';
 import 'dart:convert';
@@ -24,6 +25,41 @@ Future<List<ProductModel>> fetchProducts() async {
   } else {
     throw Exception(
       'Failed to load products. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',
+    );
+  }
+}
+
+Future<String> fetchPrivacyPolicy() async {
+  final response = await http.get(
+    Uri.parse(
+      'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/privacyPolicy.md',
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception(
+      'Failed to load privacyPolicy. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',
+    );
+  }
+}
+
+
+Future<List<ContestModel>> fetchContests() async {
+  final response = await http.get(
+    Uri.parse(
+      'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/contests.json',
+    ),
+  );
+
+  if (response.statusCode == 200) {
+    final List<dynamic> jsonList = jsonDecode(response.body);
+
+    return jsonList.map((item) => ContestModel.fromMap(item)).toList();
+  } else {
+    throw Exception(
+      'Failed to load contests. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',
     );
   }
 }

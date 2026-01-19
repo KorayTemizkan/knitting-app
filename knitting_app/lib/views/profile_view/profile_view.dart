@@ -1,13 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
+import 'package:knitting_app/controllers/providers/how_to_provider.dart';
+import 'package:knitting_app/controllers/providers/knitting_cafe_provider.dart';
 import 'package:knitting_app/controllers/providers/notes_provider.dart';
 import 'package:knitting_app/controllers/providers/product_provider.dart';
 import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
+import 'package:knitting_app/controllers/providers/supabase_provider.dart';
+import 'package:knitting_app/models/how_to_model.dart';
+import 'package:knitting_app/models/knitting_cafe_model.dart';
 import 'package:knitting_app/models/note_model.dart';
 import 'package:knitting_app/models/product_model.dart';
 import 'package:provider/provider.dart';
 import 'package:knitting_app/controllers/providers/auth_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -17,75 +24,104 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  List<int> savedIds = [];
-  List<Note> notes = [];
+  List<ProductModel> savedRecipes = [];
+  List<ProductModel> likedRecipes = [];
+
+  List<HowToModel> savedHowTos = [];
+  List<HowToModel> likedHowTos = [];
+
+  List<KnittingCafeModel> savedKnittingCafes = [];
+  List<KnittingCafeModel> likedKnittingCafes = [];
+
   String? photoPath;
+
+  List<Note> notes = [];
+
   final TextEditingController _noteTitleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _loadSavedIds();
+    _loadAllSavedAndLiked();
   }
 
-  // BU İKİ FONKSİYON İNTERNET OLMADIĞINDA BAĞLANMAK İÇİN
-
-  void _loadSavedIds() {
+  void _loadAllSavedAndLiked() async {
     final sp = context.read<SharedPreferencesProvider>();
 
-    final stringList = sp.savedCharacters;
-
-    setState(() {
-      savedIds = stringList
-          .map((e) => int.tryParse(e))
-          .whereType<int>()
-          .toList();
-
-      photoPath = sp.profilePhoto;
-    });
-  }
-
-
-  /// 🔹 savedIds sırasına göre product.id eşleştirir
-  /// artık productMap[3] -> Bere gibi oldu
-  List<ProductModel> _getSavedProducts({
-    required List<int> savedIds,
-    required List<ProductModel> products,
-  }) {
-    final productMap = {
-      for (final p in products) p.id: p,
-    }; // products listesini mape çevir
-
-    return savedIds
-        .map((id) => productMap[id])
-        .whereType<ProductModel>()
+    // Recipes
+    List<int> savedRecipesIds = sp.savedRecipes
+        .map((e) => int.tryParse(e))
+        .whereType<int>()
         .toList();
+    List<int> likedRecipesIds = sp.likedRecipes
+        .map((e) => int.tryParse(e))
+        .whereType<int>()
+        .toList();
+
+    savedRecipes = await context.read<ProductProvider>().loadWantedProducts(
+      savedRecipesIds,
+    );
+    likedRecipes = await context.read<ProductProvider>().loadWantedProducts(
+      likedRecipesIds,
+    );
+
+    // HowTos
+    List<int> savedHowTosIds = sp.savedHowTos
+        .map((e) => int.tryParse(e))
+        .whereType<int>()
+        .toList();
+    List<int> likedHowTosIds = sp.likedHowTos
+        .map((e) => int.tryParse(e))
+        .whereType<int>()
+        .toList();
+
+    savedHowTos = await context.read<HowToProvider>().loadWantedHowTos(
+      savedHowTosIds,
+    );
+    likedHowTos = await context.read<HowToProvider>().loadWantedHowTos(
+      likedHowTosIds,
+    );
+
+    // Knitting Cafes
+    List<int> savedKnittingCafesIds = sp.savedKnittingCafes
+        .map((e) => int.tryParse(e))
+        .whereType<int>()
+        .toList();
+    List<int> likedKnittingCafesIds = sp.likedKnittingCafes
+        .map((e) => int.tryParse(e))
+        .whereType<int>()
+        .toList();
+
+    savedKnittingCafes = await context
+        .read<KnittingCafeProvider>()
+        .loadWantedKnittingCafes(savedKnittingCafesIds);
+    likedKnittingCafes = await context
+        .read<KnittingCafeProvider>()
+        .loadWantedKnittingCafes(likedKnittingCafesIds);
+
+    // Profil fotoğrafı
+    photoPath = sp.profilePhoto;
+
+    // rebuild için setState
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final products = context.watch<ProductProvider>().products;
     final notesProvider = context.watch<NotesProvider>();
     notes = notesProvider.notes;
 
-    if (products.isEmpty) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
+    final recipesProvider = context.watch<ProductProvider>();
+    List<ProductModel> recipes = recipesProvider.products;
 
-    final savedProducts = _getSavedProducts(
-      savedIds: savedIds,
-      products: products,
-    );
+    final sp = context.watch<SharedPreferencesProvider>();
 
     return Scaffold(
       appBar: AppBarWidget(title: 'Profil'),
       body: Center(
         child: Column(
           children: [
-            /*
-
             // 4 UNSUR OLUCAK
 
             // PROFİL
@@ -97,8 +133,19 @@ class _ProfileViewState extends State<ProfileView> {
                 crossAxisCount: 4,
                 children: <Widget>[
                   Text('KULLANICI BILGILERI'),
+
                   //Text(authProvider.email ?? 'Giris yapilmadi'),
                   //Text(authProvider.uid ?? 'ID yok'),
+                  Text('Ad: ${sp.firstName}'),
+                  Text('Soyad: ${sp.lastName}'),
+                  Text('Telefon: ${sp.phone}'),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/profile/editProfile');
+                    },
+                    child: Text('Profilimi düzenle'),
+                  ),
 
                   photoPath != null
                       ? Image.file(
@@ -131,35 +178,83 @@ class _ProfileViewState extends State<ProfileView> {
                     onPressed: () async {
                       await context
                           .read<SharedPreferencesProvider>()
-                          .finishSetFirstOpeningTrue();
+                          .setFirstOpening();
 
                       setState(() {});
                     },
                     child: const Text("İlk girisi ac!"),
                   ),
 
+                  /*
                   ElevatedButton(
                     onPressed: () async {
                       authProvider.signOut();
                     },
                     child: Text('Cikis yap!'),
                   ),
+                  */
                 ],
               ),
             ),
 
             Divider(height: 50, thickness: 15, color: Colors.amber),
+            /*
+            Text('Kaydedilen Tarifler'),
 
-            Text('Kaydedilenler'),
-            SavedProducts(savedProducts),
+            Expanded(
+              child: ListView.builder(
+                itemCount: savedRecipes.length,
+                itemBuilder: (context, index) {
+                  final recipe = savedRecipes[index];
+
+                  return Card(
+                    child: ListTile(
+                      leading: Image.network(
+                        recipe.imageUrl,
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      ),
+
+                      title: Text(recipe.title),
+                      subtitle: Text(
+                        "${recipe.difficulty}, ${recipe.estimatedHour}",
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
 
             Divider(height: 50, thickness: 15, color: Colors.amber),
 
-            Text('Beğenilenler'),
-            SavedProducts(savedProducts),
+            Text('Beğenilen Tarifler'),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: likedRecipes.length,
+                itemBuilder: (context, index) {
+                  final p = likedRecipes[index];
+
+                  return Card(
+                    child: ListTile(
+                      leading: Image.network(
+                        p.imageUrl,
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      ),
+
+                      title: Text(p.title),
+                      subtitle: Text("${p.difficulty}, ${p.estimatedHour}"),
+                    ),
+                  );
+                },
+              ),
+            ),
 
             Divider(height: 50, thickness: 15, color: Colors.amber),
-
+*/
             TextField(
               controller: _noteTitleController,
               decoration: InputDecoration(
@@ -184,6 +279,11 @@ class _ProfileViewState extends State<ProfileView> {
                   _noteTitleController.text,
                   _noteController.text,
                 );
+
+                await context.read<SupabaseProvider>().insertNote(
+                  title: _noteTitleController.text,
+                  note: _noteController.text,
+                );
               },
 
               child: const Text('Not ekle'),
@@ -200,42 +300,31 @@ class _ProfileViewState extends State<ProfileView> {
                       title: Text(n.title),
                       subtitle: Text('${n.time}'),
                       children: [
-                        Text(n.note)
+                        Text(n.note),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await notesProvider.deleteNote(n.id);
+                          },
+                          child: Text('Sil'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await notesProvider.updateNote(
+                              _noteTitleController.text,
+                              _noteController.text,
+                              n.id,
+                            );
+                          },
+                          child: Text('Düzenle'),
+                        ),
                       ],
                     ),
                   );
                 },
               ),
             ),
-
-            */
           ],
         ),
-      ),
-    );
-  }
-
-  Expanded SavedProducts(List<ProductModel> savedProducts) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: savedProducts.length,
-        itemBuilder: (context, index) {
-          final p = savedProducts[index];
-
-          return Card(
-            child: ListTile(
-              leading: Image.network(
-                p.imageUrl,
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-              ),
-
-              title: Text(p.title),
-              subtitle: Text("${p.difficulty}, ${p.estimatedHour}"),
-            ),
-          );
-        },
       ),
     );
   }

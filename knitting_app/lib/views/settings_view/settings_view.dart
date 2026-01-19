@@ -138,6 +138,8 @@ class _SettingsViewState extends State<SettingsView> {
                   },
                 ),
 
+                Divider(height: 5),
+
                 ListTile(
                   title: const Text('Kullanım Koşulları'),
                   onTap: () {

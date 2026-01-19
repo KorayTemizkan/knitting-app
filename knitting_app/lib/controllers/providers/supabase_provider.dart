@@ -1,11 +1,22 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:knitting_app/models/profile_model.dart';
+import 'package:path/path.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
 
 class SupabaseProvider extends ChangeNotifier {
-  final supabase = Supabase.instance.client;
+  final SupabaseClient supabase = Supabase.instance.client;
+  late SharedPreferencesProvider sharedPreferencesProvider;
+
+  SupabaseProvider({required this.sharedPreferencesProvider});
+
+  List<ProfileModel> _profiles = [];
+  List<ProfileModel> get profiles => _profiles;
+
   List<Map<String, dynamic>> posts = [];
+  bool _internetConnectionController = false;
+  bool get internetConnectionController => _internetConnectionController;
 
   // AUTH FONKSİYONLARI
 
@@ -18,8 +29,11 @@ class SupabaseProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
+
       final Session? session = res.session;
       final User? user = res.user;
+
+      fetchProfile();
       return true;
     } catch (e) {
       print(e);
@@ -39,6 +53,8 @@ class SupabaseProvider extends ChangeNotifier {
 
       final Session? session = res.session;
       final User? user = res.user;
+
+      fetchProfile();
 
       return true;
     } catch (e) {
@@ -69,7 +85,7 @@ class SupabaseProvider extends ChangeNotifier {
     });
   }
 
-  // STORAGE FONKSİYONLARI
+  // PROFİL FONKSİYONLARI
 
   String imageUrl = '';
 
@@ -86,12 +102,35 @@ class SupabaseProvider extends ChangeNotifier {
     imageUrl = supabase.storage.from('posts-images').getPublicUrl(fileName);
   }
 
-  // DATABASE - POSTS FONKSİYONLARI
+  Future<void> updateProfile({
+    required String firstName,
+    required String lastName,
+    required String phone,
+  }) async {
+    final response = await supabase
+        .from('profiles')
+        .update({
+          'first_name': firstName,
+          'last_name': lastName,
+          'phone': phone,
+        })
+        .eq('id', supabase.auth.currentUser!.id);
+
+    await sharedPreferencesProvider.setFirstName(firstName);
+    await sharedPreferencesProvider.setLastName(lastName);
+    await sharedPreferencesProvider.setPhone(phone);
+  }
+
+  // DATABASE - POST FONKSİYONLARI
 
   Future<void> readPosts() async {
-    final data = await supabase.from('posts').select();
-    posts = List<Map<String, dynamic>>.from(data);
-    notifyListeners();
+    try {
+      final data = await supabase.from('posts').select();
+      posts = List<Map<String, dynamic>>.from(data);
+      _internetConnectionController = true;
+      notifyListeners();
+    } catch (e) {
+    }
   }
 
   Future<void> insert({required String header, required String content}) async {
@@ -113,14 +152,35 @@ class SupabaseProvider extends ChangeNotifier {
     await supabase.from('posts').delete().eq('column', header);
   }
 
+  // DATABASE - NOT FONKSİYONLARI
+
+  Future<void> insertNote({required String title, required String note}) async {
+    await supabase.from('notes').insert({
+      'profile_id': supabase.auth.currentUser!.id,
+      'title': title,
+      'content': note,
+    });
+  }
+
   // DATABASE - PROFİL FONKSİYONLARI
-  
-  /*
+
   Future<void> fetchProfile() async {
-    final data = await supabase
+    final response = await supabase
         .from('profiles')
         .select()
-        .eq('id', supabase.auth.currentUser.id);
+        .eq('id', supabase.auth.currentUser!.id)
+        .single();
+
+    await sharedPreferencesProvider.setFirstName(response['first_name'] ?? '');
+    await sharedPreferencesProvider.setLastName(response['last_name'] ?? '');
+    await sharedPreferencesProvider.setPhone(response['phone'] ?? '');
   }
-  */
+
+  Future<void> fetchProfiles() async {
+    final response = await supabase.from('profiles').select();
+
+    // Burayı AI ile yaptım yapacak bir şey yok
+    _profiles = (response as List).map((e) => ProfileModel.fromMap(e)).toList();
+    notifyListeners();
+  }
 }

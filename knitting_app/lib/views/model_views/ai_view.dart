@@ -168,9 +168,7 @@ class _AiViewState extends State<AiView> {
                   child: ExpansionTile(
                     title: Text(ai.question),
                     subtitle: Text(ai.time.toString()),
-                    children: <Widget>[
-                      Text(ai.answer),
-                    ],
+                    children: <Widget>[Text(ai.answer)],
                   ),
                 );
               },

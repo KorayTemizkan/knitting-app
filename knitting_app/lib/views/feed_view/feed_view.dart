@@ -25,7 +25,7 @@ class _FeedViewState extends State<FeedView> {
     final products = context.watch<ProductProvider>().products;
     final knittingCafes = context.watch<KnittingCafeProvider>().knittingCafes;
     //final auth = context.watch<AuthProviderFirebase>();
-    final streak = context.watch<SharedPreferencesProvider>().streak;
+    final sp = context.read<SharedPreferencesProvider>();
 
     return Scaffold(
       appBar: AppBarWidget(title: 'Akış'),
@@ -47,7 +47,7 @@ class _FeedViewState extends State<FeedView> {
 
             // EN ÇOK BEĞENİLEN/FAVORİLENEN PRODUCTS KISMI OLSUN, AKIŞ GİBİ( Aşağı kaydırmalık 4'lü grid), BURAYI EKLE, ANALYTİCS,
 
-            Text('Merhaba x gündür bizimlesin'),
+            Text('Merhaba ${sp.firstName}, ${sp.streak} gündür aralıksız bizimlesin'),
 
             Divider(height: 50, thickness: 15, color: Colors.amber),
 

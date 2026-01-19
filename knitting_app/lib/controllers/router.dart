@@ -10,9 +10,11 @@ import 'package:knitting_app/views/community_view/community_view.dart';
 import 'package:knitting_app/views/feed_view/feed_view.dart';
 import 'package:knitting_app/views/first_open_view.dart';
 import 'package:knitting_app/views/model_views/ai_view.dart';
+import 'package:knitting_app/views/model_views/contests_view.dart';
 import 'package:knitting_app/views/model_views/howTo_view.dart';
 import 'package:knitting_app/views/model_views/knitting_cafe_view.dart';
 import 'package:knitting_app/views/model_views/product_view.dart';
+import 'package:knitting_app/views/profile_view/edit_profile_view.dart';
 import 'package:knitting_app/views/profile_view/profile_view.dart';
 import 'package:knitting_app/views/explore_view/explore_view.dart';
 import 'package:knitting_app/views/settings_view/about_us_view.dart';
@@ -30,30 +32,38 @@ final _routerKey = GlobalKey<NavigatorState>();
 class AppRoutes {
   AppRoutes._(); // Bu sınıfın örneği oluşturulmasın diye özel yapıcı fonksiyonumuz, oluşturmaya gerek yok çünkü sabitlerimiz zaten var
 
+  // ANA SAYFA
   static const String feed =
       '/'; // static sayesinde nesne oluşturmadan doğruca ileride AppRoutes.search diye erişebiliyoruz
-  static const String search = '/search';
-  static const String community = '/community';
-  static const String profile = '/profile';
+  static const String knittingCafe = 'knittingCafe';
 
+  // ATÖLYE
+  static const String search = '/search';
+  static const String product = 'product';
+  static const String howTo = 'howTo';
+  static const String sss = '/sss';
+  static const String ai = '/ai';
+  static const String contest = '/contests';
+
+  // TOPLULUK
+  static const String community = '/community';
+
+  // PROFİL
+  static const String profile = '/profile';
+  static const String editProfile = 'editProfile';
+  static const String notepad = '/notepad';
+
+  // AYARLAR
   static const String settings = "/settings";
   static const String aboutUs = "/aboutUs";
   static const String releaseNotes = "/releaseNotes";
   static const String signIn = '/signIn';
   static const String register = '/register';
-  static const String firstOpen = '/firstOpen';
-  static const String sss = '/sss';
-  static const String termsOfUse = '/termsOfUse';
   static const String privacyPolicy = '/privacyPolicy';
-  static const String ai = '/ai';
+  static const String termsOfUse = '/termsOfUse';
 
-  static const String notepad = '/notepad';
-
-  static const String product = 'product';
-  static const String howTo = 'howTo';
-  static const String knittingCafe = 'knittingCafe';
-
-  // Privacy policy ve Terms of Use ekle
+  // GENEL AYARLAR
+  static const String firstOpen = '/firstOpen';
 }
 
 final router = GoRouter(
@@ -109,13 +119,13 @@ final router = GoRouter(
           path: AppRoutes.register,
           builder: (context, state) => RegisterView(),
         ),
-        
-         GoRoute(
+
+        GoRoute(
           path: AppRoutes.privacyPolicy,
           builder: (context, state) => PrivacyPolicyView(),
         ),
 
-         GoRoute(
+        GoRoute(
           path: AppRoutes.termsOfUse,
           builder: (context, state) => TermsOfUseView(),
         ),
@@ -183,6 +193,11 @@ StatefulShellRoute _bottomBar() {
                 path: AppRoutes.sss,
                 builder: (context, state) => SssView(),
               ),
+
+              GoRoute(
+                path: AppRoutes.contest,
+                builder: (context, state) => ContestsView(),
+              ),
             ],
           ),
         ],
@@ -202,6 +217,13 @@ StatefulShellRoute _bottomBar() {
           GoRoute(
             path: AppRoutes.profile,
             builder: (context, state) => const ProfileView(),
+
+            routes: [
+              GoRoute(
+                path: AppRoutes.editProfile,
+                builder: (context, state) => EditProfileView(),
+              ),
+            ],
           ),
         ],
       ),

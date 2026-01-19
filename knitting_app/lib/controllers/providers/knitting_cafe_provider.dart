@@ -18,4 +18,16 @@ class KnittingCafeProvider extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  Future<List<KnittingCafeModel>> loadWantedKnittingCafes(List<int> idList) async {
+    List<KnittingCafeModel> wantedKnittingCafes = [];
+
+    for (var product in _knittingCafes) {
+      if (idList.contains(product.id)) {
+        wantedKnittingCafes.add(product);
+      }
+    }
+
+    return wantedKnittingCafes;
+  }
 }

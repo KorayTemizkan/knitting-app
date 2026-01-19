@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/api_services.dart';
 import 'package:knitting_app/models/product_model.dart';
 
-class ProductProvider extends ChangeNotifier { // changenotifier sayesinde notify listeners çağırabiliyoruz
+class ProductProvider extends ChangeNotifier {
+  // changenotifier sayesinde notify listeners çağırabiliyoruz
   List<ProductModel> _products = []; // private yaptık ki dışarıdan erişilmesin
   bool _isLoading = false;
 
-// dış dünyaya kontrollü bir şekilde sadece okuma izni veriyoruz, güzel bir alışkanlık
+  // dış dünyaya kontrollü bir şekilde sadece okuma izni veriyoruz, güzel bir alışkanlık
   List<ProductModel> get products => _products;
   bool get isLoading => _isLoading;
 
@@ -18,6 +19,18 @@ class ProductProvider extends ChangeNotifier { // changenotifier sayesinde notif
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<List<ProductModel>> loadWantedProducts(List<int> idList) async {
+    List<ProductModel> wantedProducts = [];
+
+    for (var product in _products) {
+      if (idList.contains(product.id)) {
+        wantedProducts.add(product);
+      }
+    }
+
+    return wantedProducts;
   }
 }
 

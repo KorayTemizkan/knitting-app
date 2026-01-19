@@ -136,7 +136,7 @@ class _SearchViewState extends State<ExploreView> {
             Text('Araçlar'),
             Expanded(
               child: GridView.count(
-                crossAxisCount: 2,
+                crossAxisCount: 4,
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () {
@@ -154,9 +154,9 @@ class _SearchViewState extends State<ExploreView> {
 
                   ElevatedButton(
                     onPressed: () {
-                      context.go('/search/assignments');
+                      context.go('/search/contests');
                     },
-                    child: Text('Ödevlerim'),
+                    child: Text('Yarışmalar'),
                   ),
 
                   ElevatedButton(

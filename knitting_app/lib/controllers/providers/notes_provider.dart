@@ -62,6 +62,21 @@ class NotesProvider extends ChangeNotifier {
     await loadNotes();
   }
 
+  Future<void> updateNote(String title, String note, int id) async {
+    if (_db == null) return;
+
+    await _db!.update('notes', {
+      'title': title,
+      'note': note,
+      'time': DateTime.now().millisecondsSinceEpoch,
+    },
+    where: 'id = ?',
+    whereArgs: [id],
+    );
+
+    await loadNotes();
+  }
+
   /// 4️⃣ DELETE
   Future<void> deleteNote(int id) async {
     if (_db == null) return;

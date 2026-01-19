@@ -30,15 +30,17 @@ class _ProductViewState extends State<ProductView> {
   unutma ! Provider.of nesne oluşturmaz. O(1)'lik referans oluşturur.
 
   */
-@override
+  @override
   void initState() {
     super.initState();
 
     final sp = context.read<SharedPreferencesProvider>();
 
-    final list = sp.savedCharacters;
+    final savedRecipeslist = sp.savedRecipes;
+    isSaved = savedRecipeslist.contains(widget.product.id.toString());
 
-    isSaved = list.contains(widget.product.id.toString());
+    final likedRecipesList = sp.likedRecipes;
+    isLiked = likedRecipesList.contains(widget.product.id.toString());
   }
 
   @override
@@ -57,7 +59,7 @@ class _ProductViewState extends State<ProductView> {
             ),
 
             saveProduct(context),
- 
+
             likeProduct(context),
 
             // BURAYA GÖRÜNTÜLENME FONKSİYONU EKLEYECEĞİZ. KULLANICI HER BU SAYFAYI AÇTIĞINDA FİREBASE'E +1 SİNYAL YOLLAYACAĞIZ
@@ -82,9 +84,9 @@ class _ProductViewState extends State<ProductView> {
         final sp = context.read<SharedPreferencesProvider>();
 
         if (isSaved) {
-          sp.removeCharacter(widget.product.id);
+          sp.removeSavedRecipe(widget.product.id);
         } else {
-          sp.saveCharacter(widget.product.id);
+          sp.saveRecipe(widget.product.id);
         }
 
         setState(() {
@@ -94,5 +96,4 @@ class _ProductViewState extends State<ProductView> {
       child: Text(isSaved ? 'Unsave' : 'Save'),
     );
   }
-
 }

@@ -18,4 +18,17 @@ class HowToProvider extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  
+  Future<List<HowToModel>> loadWantedHowTos(List<int> idList) async {
+    List<HowToModel> wantedHowTos = [];
+
+    for (var product in _howTos) {
+      if (idList.contains(product.id)) {
+        wantedHowTos.add(product);
+      }
+    }
+
+    return wantedHowTos;
+  }
 }

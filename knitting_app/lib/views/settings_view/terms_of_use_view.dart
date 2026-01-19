@@ -16,7 +16,8 @@ class _TermsOfUseViewState extends State<TermsOfUseView> {
 
       body: Column(
         children: [
-          Text('Gizlilik koşulları'),
+          Text('Kullanım koşulları'),
+          Text('Burası da Gizlilik Politikası sayfası gibi olucak'),
         ],
       ),
     );

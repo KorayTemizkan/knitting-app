@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
 import 'package:knitting_app/controllers/providers/supabase_provider.dart';
 import 'package:knitting_app/controllers/widgets/generic_search_anchor_bar.dart';
+import 'package:knitting_app/models/profile_model.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,6 +18,8 @@ class CommunityView extends StatefulWidget {
 class _CommunityViewState extends State<CommunityView> {
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+
+  List<ProfileModel> profiles = [];
 
   final ImagePicker _imagePicker = ImagePicker();
   File? _selectedImage;
@@ -40,6 +43,7 @@ class _CommunityViewState extends State<CommunityView> {
     super.initState();
 
     context.read<SupabaseProvider>().readPosts();
+    profiles = context.read<SupabaseProvider>().profiles;
   }
 
   @override
@@ -49,18 +53,9 @@ class _CommunityViewState extends State<CommunityView> {
       body: Center(
         child: Column(
           children: [
-            /*
-            Bu kısımla ilgili düşüncelerim tam net değil ama şimdilik orta boyutta bir logomuzu buraya koyup yakında! uyarısı versek yeter sanırım.
-            
-            4 UNSUR OLUCAK
-            
-            Facebook gönderi atabilme: Gönderi atabilme, takip ettiğin insanların gönderileri ya da 
-            Facebook profilleri ve arama:Farklı kullanıcıları görebilme, profil sayfalarına gidebilme olsun. - Kullanıcı arama olsun, ama normal olarak ayın enleri yapalım. aktiflik sıralamasına göre ayın 50'si filan olsun
-            Facebook grupları: Örgü kafe toplulukları olsun. O kafelerin sahipleri doğrulama yaparsa onlar eklenebilir mesela. Ya da birisi Bursa Nilüferciler diye bir topluluk kursun ve üyeleri olsun. Bu toplulukların sayfası olsun. Bu topluluklarda gönderi atılınca sadece buraya özel olsun. Bu topluluğa giriş onayla olsun.
-            
-            Mesajlaşma yerine gönderilere yorum atma olsun şimdilik
-            */
             SizedBox(height: 10),
+
+            if (profiles.isEmpty) CircularProgressIndicator(),
 
             Text('GÖNDERİ ATMA'),
 
@@ -108,14 +103,40 @@ class _CommunityViewState extends State<CommunityView> {
             Divider(height: 50, thickness: 15, color: Colors.amber),
 
             Text('TÜM KULLANICILAR'),
-            // Şimdilik tüm kullanıcıları listeleme fonksiyonu ekleyelim
+
+            Expanded(
+              child:
+                  context.watch<SupabaseProvider>().internetConnectionController
+                  ? ListView.builder(
+                      itemCount: profiles.length,
+                      itemBuilder: (context, index) {
+                        final user = profiles[index];
+
+                        return Card(
+                          child: ListTile(
+                            title: Text(user.firstName),
+                            subtitle: Text(user.lastName),
+                          ),
+                        );
+                      },
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 12),
+                        Text('Lütfen internet bağlantınızı kontrol edin!'), // KONTROL EKSİK
+                      ],
+                    ),
+            ),
+
             Divider(height: 50, thickness: 15, color: Colors.amber),
 
-            
             Text('GÖNDERİLERİM'),
           
             Expanded(
-              child: Consumer<SupabaseProvider>(
+              child: context.read<SupabaseProvider>().internetConnectionController 
+              ? Consumer<SupabaseProvider>(
                 // provider içindeki veriyi dinleyip sadece o widgeti yeniden çizmek için kullanılan bir widgettir.
                 builder: (context, provider, _) {
                   final posts = provider.posts;
@@ -134,11 +155,15 @@ class _CommunityViewState extends State<CommunityView> {
                     },
                   );
                 },
-              ),
+              ) : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 12),
+                  Text('Lütfen internet bağlantınızı kontrol edin!') // KONTROL EKSİK
+                ],
+              )
             ),
-
-
-
 
             // Tüm gönderiler
             //ListView.builder(itemCount: 10, itemBuilder: (context, index) {}),
