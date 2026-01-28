@@ -27,7 +27,7 @@ class AppView extends StatelessWidget {
               index: 0,
               currentIndex: navigationShell.currentIndex,
               label: 'Ana Sayfa',
-              icon: Icons.feed,
+              icon: Icons.home,
             ),
 
             _menuItem(
@@ -35,8 +35,8 @@ class AppView extends StatelessWidget {
 
               index: 1,
               currentIndex: navigationShell.currentIndex,
-              label: 'Atölye',
-              icon: Icons.explore,
+              label: 'Eğitim',
+              icon: Icons.school,
             ),
 
             _menuItem(
@@ -45,7 +45,7 @@ class AppView extends StatelessWidget {
               index: 2,
               currentIndex: navigationShell.currentIndex,
               label: 'Topluluk',
-              icon: Icons.escalator_sharp,
+              icon: Icons.groups,
             ),
 
             _menuItem(
@@ -54,7 +54,7 @@ class AppView extends StatelessWidget {
               index: 3,
               currentIndex: navigationShell.currentIndex,
               label: 'Profil',
-              icon: Icons.home,
+              icon: Icons.account_circle,
             ),
             
           ]
@@ -74,7 +74,6 @@ class AppView extends StatelessWidget {
     return NavigationDestination(
       icon: Icon(
         icon,
-        color: currentIndex == index ? Colors.black : Colors.blue,
       ),
       label: label,
     );

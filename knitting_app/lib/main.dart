@@ -123,8 +123,7 @@ class _MyAppState extends State<MyApp> {
       // Dart'da named parameter = ile değil : ile verilir.
       routerConfig: router,
 
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: themeProvider.currentTheme,
       themeMode: themeProvider.themeMode,
 
       debugShowCheckedModeBanner: true,

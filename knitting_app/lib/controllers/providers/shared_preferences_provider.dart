@@ -67,7 +67,7 @@ class SharedPreferencesProvider extends ChangeNotifier {
 
   // İlk açılışı geçtiğimizi haber vermek
   Future<void> setFirstOpening() async {
-    await _preferences.setBool(_firstOpenKey, false);
+    await _preferences.setBool(_firstOpenKey, true);
     notifyListeners();
   }
 

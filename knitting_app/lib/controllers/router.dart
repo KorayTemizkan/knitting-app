@@ -73,7 +73,8 @@ final router = GoRouter(
   redirect: (context, state) {
     final sp = context.read<SharedPreferencesProvider>();
 
-    final isFirstOpen = sp.isFirstOpen;
+   bool isFirstOpen = sp.isFirstOpen;
+    isFirstOpen = false;
     final isOnboarding = state.uri.path == AppRoutes.firstOpen;
 
     if (isFirstOpen && !isOnboarding) {

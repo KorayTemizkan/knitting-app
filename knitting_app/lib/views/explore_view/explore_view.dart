@@ -25,18 +25,21 @@ class _SearchViewState extends State<ExploreView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Merhaba'),
-          content: Text(
-            'WhatsApp hattımıza yönlendiriliyorsunuz! Fidan Öğretmen-e fotoğraf ya da fotoğrafsız soru sorabilirsiniz',
-          ),
+          title: const Text('Merhaba teyzecim'),
+          content: Text('''
+Senin yazılımcı oğlun ya da kızın varsa Allah rızası için onlara şunu iletir misin?
+Kızım ben telefona bir şey indirdim örgü filan öğreniyorum çok beğendim. Bunu yapan oğlan da staj arıyormuş
+Allah rızası için filan diyor. Yardımcı olur musun kurban oldluğum.
+'''),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Geri dön'),
+              child: const Text('Sordun di mi?'),
             ),
             TextButton(
-              onPressed: () => openWhatsAppSupport(),
-              child: const Text('Devam et'),
+              //onPressed: () => openWhatsAppSupport(),
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Allah rızası için sor'),
             ),
           ],
         );
