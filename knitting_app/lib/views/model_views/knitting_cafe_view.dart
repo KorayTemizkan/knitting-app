@@ -1,10 +1,6 @@
-// PREFERENCES eklenecek
-
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
 import 'package:knitting_app/models/knitting_cafe_model.dart';
-import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
-import 'package:provider/provider.dart';
 
 class KnittingCafeView extends StatefulWidget {
   final KnittingCafeModel knittingCafe;

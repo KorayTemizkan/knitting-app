@@ -4,12 +4,12 @@ import 'package:knitting_app/controllers/api_services.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:knitting_app/controllers/providers/ai_answers_provider.dart';
-import 'package:knitting_app/controllers/widgets/card_list.dart';
-import 'package:knitting_app/controllers/widgets/subtitled_info_card_with_image.dart';
-import 'package:knitting_app/controllers/widgets/take_note.dart';
-import 'package:knitting_app/controllers/widgets/title_text.dart';
-import 'package:knitting_app/models/ai_answer_model.dart';
+import 'package:knitting_app/controllers/providers/ai_response_provider.dart';
+import 'package:knitting_app/controllers/widgets/lists/card_list.dart';
+import 'package:knitting_app/controllers/widgets/cards/subtitled_info_card_with_image.dart';
+import 'package:knitting_app/controllers/widgets/cards/take_note_card.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text.dart';
+import 'package:knitting_app/models/ai_response_model.dart';
 import 'package:provider/provider.dart';
 
 class AiView extends StatefulWidget {
@@ -20,7 +20,7 @@ class AiView extends StatefulWidget {
 }
 
 class _AiViewState extends State<AiView> {
-  List<AiAnswerModel> aiAnswers = [];
+  List<AiResponseModel> aiAnswers = [];
 
   final TextEditingController _questionController = TextEditingController();
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:knitting_app/controllers/url_launcher_controller.dart';
+import 'package:knitting_app/controllers/url_launcher.dart';
 
 Future<void> DialogButton(BuildContext context) async {
   showDialog(

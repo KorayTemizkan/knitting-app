@@ -1,3 +1,7 @@
+/*
+Burada sadece ad, soyad, tema, dil seçeneği gibi en temel ve basit şeyleri saklayacağım.
+Hive'de ise daha karmaşık şeyleri saklayacağım. Ayrıca internetten çekeceğim verilerin yönetimini burada yapıyorum
+*/
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +17,11 @@ class SharedPreferencesProvider extends ChangeNotifier {
   Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
   }
+
+  // VERSİYONLAMA
+  static const String _localPatternVersionKey = 'localPatternVersion';
+  static const String _localTutorialVersionKey = 'localTutorialVersion';
+  static const String _localDesignVersionKey = 'localDesignVersion';
 
   // AÇILIŞ EKRANI
   static const String _firstOpenKey = 'firstOpen';
@@ -54,14 +63,25 @@ class SharedPreferencesProvider extends ChangeNotifier {
   int get streak => _preferences.getInt(_streakKey) ?? 0;
   bool get darkTheme => _preferences.getBool(_darkThemeKey) ?? false;
   bool get isFirstOpen => _preferences.getBool(_firstOpenKey) ?? true;
+
   String get profilePhoto =>
       _preferences.getString(_profilePhotoFilePathKey) ?? '';
+  String get userName => _preferences.getString(_userName) ?? '';
   String get firstName => _preferences.getString(_first_name) ?? '';
   String get lastName => _preferences.getString(_last_name) ?? '';
   String get phone => _preferences.getString(_phone) ?? '';
   String get createdAt => _preferences.getString(_createdAt) ?? '';
+  String get localPatternVersion =>
+      _preferences.getString(_localPatternVersionKey) ?? '';
 
   // *****************************************************************************
+
+  // VERSİYONLAMA
+
+  Future<void> setLocalPatternVersion(String value) async {
+    await _preferences.setString(_localPatternVersionKey, value);
+    notifyListeners();
+  }
 
   // AÇILIŞ EKRANI
 

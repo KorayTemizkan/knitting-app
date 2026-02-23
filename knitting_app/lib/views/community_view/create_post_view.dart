@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/widgets/card_list.dart';
-import 'package:knitting_app/controllers/widgets/take_note.dart';
-import 'package:knitting_app/controllers/widgets/title_text.dart';
-import 'package:knitting_app/controllers/widgets/title_with_icon.dart';
+import 'package:knitting_app/controllers/widgets/cards/take_note_card.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text.dart';
 
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key});

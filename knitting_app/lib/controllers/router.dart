@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/app_view.dart';
-import 'package:knitting_app/controllers/settings/user/register.dart';
-import 'package:knitting_app/controllers/settings/user/signIn.dart';
-import 'package:knitting_app/models/how_to_model.dart';
+import 'package:knitting_app/views/community_view/user_profile_view.dart';
+import 'package:knitting_app/views/home_view/spinning_wheel_view.dart';
+import 'package:knitting_app/views/model_views/contest_view.dart';
+import 'package:knitting_app/views/profile_view/register_view.dart';
+import 'package:knitting_app/views/profile_view/sign_in_view.dart';
+import 'package:knitting_app/models/tutorial_model.dart';
 import 'package:knitting_app/models/knitting_cafe_model.dart';
-import 'package:knitting_app/models/product_model.dart';
+import 'package:knitting_app/models/pattern_model.dart';
 import 'package:knitting_app/views/community_view/community_view.dart';
 import 'package:knitting_app/views/community_view/create_post_view.dart';
-import 'package:knitting_app/views/feed_view/feed_view.dart';
+import 'package:knitting_app/views/home_view/home_view.dart';
 import 'package:knitting_app/views/onboarding_view.dart';
 import 'package:knitting_app/views/model_views/ai_view.dart';
-import 'package:knitting_app/views/model_views/contests_view.dart';
+import 'package:knitting_app/views/home_view/contests_view.dart';
 import 'package:knitting_app/views/model_views/howTo_view.dart';
 import 'package:knitting_app/views/model_views/knitting_cafe_view.dart';
-import 'package:knitting_app/views/model_views/product_view.dart';
+import 'package:knitting_app/views/model_views/pattern_view.dart';
 import 'package:knitting_app/views/profile_view/finisheds_view.dart';
 import 'package:knitting_app/views/profile_view/edit_profile_view.dart';
 import 'package:knitting_app/views/profile_view/likeds_view.dart';
 import 'package:knitting_app/views/profile_view/notes_view.dart';
 import 'package:knitting_app/views/profile_view/posts_view.dart';
 import 'package:knitting_app/views/profile_view/profile_view.dart';
-import 'package:knitting_app/views/explore_view/explore_view.dart';
+import 'package:knitting_app/views/see_all_view.dart';
+import 'package:knitting_app/views/tutorials_view/category_view.dart';
+import 'package:knitting_app/views/tutorials_view/tutorials_view.dart';
 import 'package:knitting_app/views/profile_view/saveds_view.dart';
 import 'package:knitting_app/views/profile_view/share_view.dart';
 import 'package:knitting_app/views/profile_view/unfinisheds_view.dart';
-import 'package:knitting_app/views/search_view/search_view.dart';
+import 'package:knitting_app/views/explore_view/explore_view.dart';
 import 'package:knitting_app/views/settings_view/about_us_view.dart';
 import 'package:knitting_app/views/settings_view/notifications_view.dart';
 import 'package:knitting_app/views/settings_view/privacy_policy_view.dart';
@@ -40,27 +45,31 @@ import 'package:provider/provider.dart';
 final _routerKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
-  AppRoutes._(); // Bu sınıfın örneği oluşturulmasın diye özel yapıcı fonksiyonumuz, oluşturmaya gerek yok çünkü sabitlerimiz zaten var
+  AppRoutes._(); // Bu sınıfın örneği oluşturulmasın diye özel yapıcı fonksiyonumuz, oluşturmaya gerek yok çünkü sabitlerimiz zaten var.
 
   // ANA SAYFA
-  static const String feed =
+  static const String home =
       '/'; // static sayesinde nesne oluşturmadan doğruca ileride AppRoutes.search diye erişebiliyoruz
-  static const String knittingCafe = 'knittingCafe';
+  static const String contest = 'contest';
+  static const String spinningWheel = 'spinningWheel';
 
   // KEŞFET
-  static const String kesfet = '/kesfet';
+  static const String explore = '/explore';
 
   // EĞİTİM
-  static const String search = '/search';
-  static const String product = 'product';
-  static const String howTo = 'howTo';
+  static const String tutorials = '/tutorials';
+  static const String pattern = 'product';
+  static const String tutorial = 'howTo';
+  static const String design = 'design';
   static const String sss = '/sss';
   static const String ai = '/ai';
-  static const String contest = '/contests';
+  static const String contests = '/contests';
+  static const String category = 'category';
 
   // TOPLULUK
   static const String community = '/community';
   static const String createPost = 'createPost';
+  static const String userProfile = 'userProfile';
 
   // PROFİL
   static const String profile = '/profile';
@@ -84,6 +93,7 @@ class AppRoutes {
 
   // GENEL AYARLAR
   static const String onboarding = '/onboarding';
+  static const String seeAll = '/seeAll';
 
   // BİLDİRİMLER
   static const String notifications = '/notifications';
@@ -105,7 +115,7 @@ final router = GoRouter(
     }
 
     if (!isFirstOpen && isOnboarding) {
-      return AppRoutes.feed;
+      return AppRoutes.home;
     }
 
     return null;
@@ -174,24 +184,35 @@ StatefulShellRoute _bottomBar() {
       StatefulShellBranch(
         routes: [
           GoRoute(
-            path: AppRoutes.feed,
+            path: AppRoutes.home,
             builder: (context, state) => FeedView(),
 
             routes: [
               GoRoute(
-                path: AppRoutes.product,
+                path: AppRoutes.seeAll,
                 builder: (context, state) {
-                  final product = state.extra as ProductModel;
+                  // state.extra üzerinden gelen veriyi al
+                  final category = state.extra as String;
+                  return SeeAllView(category: category);
+                },
+              ),
+
+              GoRoute(
+                path: AppRoutes.pattern,
+                builder: (context, state) {
+                  final product = state.extra as PatternModel;
                   return ProductView(product: product);
                 },
               ),
 
               GoRoute(
-                path: AppRoutes.knittingCafe,
-                builder: (context, state) {
-                  final knittingCafe = state.extra as KnittingCafeModel;
-                  return KnittingCafeView(knittingCafe: knittingCafe);
-                },
+                path: AppRoutes.contest,
+                builder: (context, state) => ContestView(),
+              ),
+
+              GoRoute(
+                path: AppRoutes.spinningWheel,
+                builder: (context, state) => SpinningWheelView(),
               ),
             ],
           ),
@@ -202,7 +223,7 @@ StatefulShellRoute _bottomBar() {
       StatefulShellBranch(
         routes: [
           GoRoute(
-            path: AppRoutes.kesfet,
+            path: AppRoutes.explore,
             builder: (context, state) => SearchView(),
           ),
         ],
@@ -211,16 +232,30 @@ StatefulShellRoute _bottomBar() {
       StatefulShellBranch(
         routes: [
           GoRoute(
-            path: AppRoutes.search,
+            path: AppRoutes.tutorials,
             builder: (context, state) => const ExploreView(),
 
             routes: [
               GoRoute(
-                path: AppRoutes.howTo,
+                path: AppRoutes.seeAll,
                 builder: (context, state) {
-                  final howTo = state.extra as HowToModel;
+                  // state.extra üzerinden gelen veriyi al
+                  final category = state.extra as String;
+                  return SeeAllView(category: category);
+                },
+              ),
+
+              GoRoute(
+                path: AppRoutes.tutorial,
+                builder: (context, state) {
+                  final howTo = state.extra as TutorialModel;
                   return HowToView(howTo: howTo);
                 },
+              ),
+
+              GoRoute(
+                path: AppRoutes.category,
+                builder: (context, state) => CategoryView(),
               ),
 
               GoRoute(
@@ -234,7 +269,7 @@ StatefulShellRoute _bottomBar() {
               ),
 
               GoRoute(
-                path: AppRoutes.contest,
+                path: AppRoutes.contests,
                 builder: (context, state) => ContestsView(),
               ),
             ],
@@ -250,8 +285,22 @@ StatefulShellRoute _bottomBar() {
 
             routes: [
               GoRoute(
+                path: AppRoutes.seeAll,
+                builder: (context, state) {
+                  // state.extra üzerinden gelen veriyi al
+                  final category = state.extra as String;
+                  return SeeAllView(category: category);
+                },
+              ),
+
+              GoRoute(
                 path: AppRoutes.createPost,
                 builder: (context, state) => const CreatePostView(),
+              ),
+
+              GoRoute(
+                path: AppRoutes.userProfile,
+                builder: (context, state) => const UserProfileView(),
               ),
             ],
           ),

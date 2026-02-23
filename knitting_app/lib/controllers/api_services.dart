@@ -1,17 +1,71 @@
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
 import 'package:knitting_app/models/contest_model.dart';
-import 'package:knitting_app/models/how_to_model.dart';
+import 'package:knitting_app/models/tutorial_model.dart';
 import 'package:knitting_app/models/knitting_cafe_model.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:knitting_app/models/product_model.dart';
+import 'package:knitting_app/models/pattern_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:knitting_app/models/release_note_model.dart';
 
-Future<List<ProductModel>> fetchProducts() async {
+
+/*
+
+Offline-first yaklaşımı yaptık.
+Supabase Storage içinde versions adında json dosyası var. Bunun içinde her bir türün son versiyon numarası var.
+Yerelde SharedPreferences içinde her bir tür için versiyon numarası var.
+Uygulama her açılışında buraya istek atıyor. Eğer versiyon yereldekinden farklıysa yeni dosyayı tamamen indirip yereldekinin üzerine yazıyor.
+Eğer internet yoksa istek başarısız oluyor ve yereldeki versiyon kullanılmaya devam ediyor.
+*/
+
+Future<void> fetchAndSyncPatterns(SharedPreferencesProvider spProvider) async {
+  
+  final patternBox = Hive.box<PatternModel>(
+    'patternBox',
+  ); // main'de oluşturduğumuz Hive boxuna burada erişmek için böyle yaptık
+   await spProvider.setLocalPatternVersion('1.0.0');
+
+  const String versionsUrl =
+      'https://jhmahqvihqclcoqziyvt.supabase.co/storage/v1/object/public/posts-images/versions.json';
+  const String patternsUrl =
+      'https://jhmahqvihqclcoqziyvt.supabase.co/storage/v1/object/public/posts-images/patterns.json';
+  const String tutorialsUrl = '';
+  const String designsUrl = '';
+
+  try {
+    final versionsResponse = await http.get(Uri.parse(versionsUrl));
+
+    if (versionsResponse.statusCode == 200) {
+      final versionsData = json.decode(versionsResponse.body);
+      String remotePatternVersion = versionsData['versions']['patterns'];
+
+      if (remotePatternVersion != spProvider.localPatternVersion || patternBox.isEmpty) {
+        final patternsResponse = await http.get(Uri.parse(patternsUrl));
+
+        if (patternsResponse.statusCode == 200) {
+          final List<dynamic> patternJsonList = jsonDecode(
+            patternsResponse.body,
+          );
+
+          await patternBox.clear();
+          for (var item in patternJsonList) {
+            final model = PatternModel.fromMap(item);
+            await patternBox.put(model.id, model);
+          }
+
+          await spProvider.setLocalPatternVersion(remotePatternVersion);
+        }
+      }
+    }
+  } catch (e) {
+    print('Sync hatası: $e');
+  }
+}
+
+Future<List<PatternModel>> fetchProducts() async {
   final response = await http.get(
     Uri.parse(
       'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/products.json',
@@ -21,7 +75,7 @@ Future<List<ProductModel>> fetchProducts() async {
   if (response.statusCode == 200) {
     final List<dynamic> jsonList = jsonDecode(response.body);
 
-    return jsonList.map((item) => ProductModel.fromMap(item)).toList();
+    return jsonList.map((item) => PatternModel.fromMap(item)).toList();
   } else {
     throw Exception(
       'Failed to load products. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',
@@ -45,7 +99,6 @@ Future<String> fetchPrivacyPolicy() async {
   }
 }
 
-
 Future<List<ContestModel>> fetchContests() async {
   final response = await http.get(
     Uri.parse(
@@ -64,7 +117,7 @@ Future<List<ContestModel>> fetchContests() async {
   }
 }
 
-Future<List<HowToModel>> fetchHowTos() async {
+Future<List<TutorialModel>> fetchHowTos() async {
   final response = await http.get(
     Uri.parse(
       'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/howTos.json',
@@ -74,7 +127,7 @@ Future<List<HowToModel>> fetchHowTos() async {
   if (response.statusCode == 200) {
     final List<dynamic> jsonList = jsonDecode(response.body);
 
-    return jsonList.map((item) => HowToModel.fromMap(item)).toList();
+    return jsonList.map((item) => TutorialModel.fromMap(item)).toList();
   } else {
     throw Exception(
       'Failed to load howTos. Code: ${response.statusCode}, Reason: ${response.reasonPhrase}',

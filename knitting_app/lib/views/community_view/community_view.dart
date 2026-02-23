@@ -5,19 +5,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
 import 'package:knitting_app/controllers/providers/knitting_cafe_provider.dart';
 import 'package:knitting_app/controllers/providers/supabase_provider.dart';
-import 'package:knitting_app/controllers/widgets/card_list.dart';
-import 'package:knitting_app/controllers/widgets/comment_section.dart';
-import 'package:knitting_app/controllers/widgets/content_card.dart';
-import 'package:knitting_app/controllers/widgets/generic_search_anchor_bar.dart';
-import 'package:knitting_app/controllers/widgets/horizontal_card_list.dart';
+import 'package:knitting_app/controllers/widgets/cards/comment_card.dart';
+import 'package:knitting_app/controllers/widgets/cards/content_card.dart';
+import 'package:knitting_app/controllers/widgets/lists/horizontal_card_list.dart';
 import 'package:knitting_app/controllers/widgets/segmented_tab.dart';
-import 'package:knitting_app/controllers/widgets/take_note.dart';
-import 'package:knitting_app/controllers/widgets/title_text.dart';
-import 'package:knitting_app/controllers/widgets/title_with_see_all.dart';
-import 'package:knitting_app/controllers/widgets/weekly_stars_card.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text_with_see_all.dart';
+import 'package:knitting_app/controllers/widgets/cards/weekly_stars_card.dart';
 import 'package:knitting_app/models/profile_model.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CommunityView extends StatefulWidget {
   const CommunityView({super.key});
@@ -102,7 +98,9 @@ class _CommunityViewState extends State<CommunityView> {
                 title: "@kkkkorayyyy",
                 difficulty: "540 tığcık",
                 estimatedHour: "",
-                onTap: () {},
+                onTap: () {
+                  context.go('/community/userProfile');
+                },
               );
             },
           ),

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
-import 'package:knitting_app/models/how_to_model.dart';
-import 'package:provider/provider.dart';
+import 'package:knitting_app/models/tutorial_model.dart';
 
 class HowToView extends StatefulWidget {
-  final HowToModel howTo;
+  final TutorialModel howTo;
   const HowToView({super.key, required this.howTo});
 
   @override

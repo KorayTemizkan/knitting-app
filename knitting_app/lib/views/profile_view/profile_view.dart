@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/providers/how_to_provider.dart';
 import 'package:knitting_app/controllers/providers/knitting_cafe_provider.dart';
 import 'package:knitting_app/controllers/providers/notes_provider.dart';
-import 'package:knitting_app/controllers/providers/product_provider.dart';
+import 'package:knitting_app/controllers/providers/pattern_provider.dart';
 import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
-import 'package:knitting_app/controllers/widgets/card_list.dart';
+import 'package:knitting_app/controllers/providers/tutorial_provider.dart';
+import 'package:knitting_app/controllers/widgets/lists/card_list.dart';
 import 'package:knitting_app/controllers/widgets/my_gesture_button.dart';
-import 'package:knitting_app/controllers/widgets/profile_card.dart';
-import 'package:knitting_app/controllers/widgets/success_card.dart';
-import 'package:knitting_app/controllers/widgets/title_text.dart';
-import 'package:knitting_app/models/how_to_model.dart';
+import 'package:knitting_app/controllers/widgets/cards/profile_card.dart';
+import 'package:knitting_app/controllers/widgets/cards/success_card.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text.dart';
+import 'package:knitting_app/models/tutorial_model.dart';
 import 'package:knitting_app/models/knitting_cafe_model.dart';
 import 'package:knitting_app/models/note_model.dart';
-import 'package:knitting_app/models/product_model.dart';
+import 'package:knitting_app/models/pattern_model.dart';
 import 'package:provider/provider.dart';
 
 class ProfileView extends StatefulWidget {
@@ -24,15 +24,6 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  List<ProductModel> savedRecipes = [];
-  List<ProductModel> likedRecipes = [];
-
-  List<HowToModel> savedHowTos = [];
-  List<HowToModel> likedHowTos = [];
-
-  List<KnittingCafeModel> savedKnittingCafes = [];
-  List<KnittingCafeModel> likedKnittingCafes = [];
-
   String? photoPath;
 
   List<Note> notes = [];
@@ -41,82 +32,7 @@ class _ProfileViewState extends State<ProfileView> {
   final TextEditingController _noteController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    _loadAllSavedAndLiked();
-  }
-
-  void _loadAllSavedAndLiked() async {
-    final sp = context.read<SharedPreferencesProvider>();
-
-    // Recipes
-    List<int> savedRecipesIds = sp.savedRecipes
-        .map((e) => int.tryParse(e))
-        .whereType<int>()
-        .toList();
-    List<int> likedRecipesIds = sp.likedRecipes
-        .map((e) => int.tryParse(e))
-        .whereType<int>()
-        .toList();
-
-    savedRecipes = await context.read<ProductProvider>().loadWantedProducts(
-      savedRecipesIds,
-    );
-    likedRecipes = await context.read<ProductProvider>().loadWantedProducts(
-      likedRecipesIds,
-    );
-
-    // HowTos
-    List<int> savedHowTosIds = sp.savedHowTos
-        .map((e) => int.tryParse(e))
-        .whereType<int>()
-        .toList();
-    List<int> likedHowTosIds = sp.likedHowTos
-        .map((e) => int.tryParse(e))
-        .whereType<int>()
-        .toList();
-
-    savedHowTos = await context.read<HowToProvider>().loadWantedHowTos(
-      savedHowTosIds,
-    );
-    likedHowTos = await context.read<HowToProvider>().loadWantedHowTos(
-      likedHowTosIds,
-    );
-
-    // Knitting Cafes
-    List<int> savedKnittingCafesIds = sp.savedKnittingCafes
-        .map((e) => int.tryParse(e))
-        .whereType<int>()
-        .toList();
-    List<int> likedKnittingCafesIds = sp.likedKnittingCafes
-        .map((e) => int.tryParse(e))
-        .whereType<int>()
-        .toList();
-
-    savedKnittingCafes = await context
-        .read<KnittingCafeProvider>()
-        .loadWantedKnittingCafes(savedKnittingCafesIds);
-    likedKnittingCafes = await context
-        .read<KnittingCafeProvider>()
-        .loadWantedKnittingCafes(likedKnittingCafesIds);
-
-    // Profil fotoğrafı
-    photoPath = sp.profilePhoto;
-
-    // rebuild için setState
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final notesProvider = context.watch<NotesProvider>();
-    notes = notesProvider.notes;
-
-    final recipesProvider = context.watch<ProductProvider>();
-    List<ProductModel> recipes = recipesProvider.products;
-
-    final sp = context.watch<SharedPreferencesProvider>();
-
     return Scaffold(
       appBar: AppBarWidget(title: 'Profil'),
       body: ListView(
@@ -124,95 +40,116 @@ class _ProfileViewState extends State<ProfileView> {
           ProfileCard(), // Yukarıdaki widget'ı burada çağırıyorsun
 
           TitleText(text: 'Hesaplarım'),
-          CardList(
-            widgets: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .spaceEvenly, // İkonları satıra eşit dağıtır
-                  children: const [
-                    // Sosyal Medya Grubu (Turuncu)
-                    Icon(
-                      Icons.camera_alt_outlined,
-                      color: Color(0xFFFF5722),
-                      size: 24,
+
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      color: const Color(0xFFFF5722),
+                      onPressed: () {},
                     ),
-                    Icon(
-                      Icons.play_circle_outline,
-                      color: Color(0xFFFF5722),
-                      size: 24,
+                    IconButton(
+                      icon: const Icon(Icons.play_circle_outline),
+                      color: const Color(0xFFFF5722),
+                      onPressed: () {},
                     ),
-                    Icon(
-                      Icons.facebook_outlined,
-                      color: Color(0xFFFF5722),
-                      size: 24,
+                    IconButton(
+                      icon: const Icon(Icons.facebook_outlined),
+                      color: const Color(0xFFFF5722),
+                      onPressed: () {},
                     ),
-                    Icon(
-                      Icons.close_rounded,
-                      color: Color(0xFFFF5722),
-                      size: 24,
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded),
+                      color: const Color(0xFFFF5722),
+                      onPressed: () {},
                     ),
-                    Icon(
-                      Icons.attach_money_outlined,
-                      color: Color(0xFFFF5722),
-                      size: 24,
-                    ),
-                    // Satış ve Web Grubu (Siyah/Koyu Gri)
-                    Icon(
-                      Icons.push_pin_outlined,
-                      color: Color(0xFF1E1E1E),
-                      size: 24,
-                    ),
-                    Icon(
-                      Icons.shopping_bag_outlined,
-                      color: Color(0xFF1E1E1E),
-                      size: 24,
-                    ),
-                    Icon(
-                      Icons.language_rounded,
-                      color: Color(0xFF1E1E1E),
-                      size: 24,
+                    IconButton(
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      color: const Color(0xFFFF5722),
+                      onPressed: () {},
                     ),
                   ],
                 ),
-              ),
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.attach_money_outlined),
+                      color: const Color(0xFFFF5722),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.push_pin_outlined),
+                      color: const Color(0xFF1E1E1E),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.shopping_bag_outlined),
+                      color: const Color(0xFF1E1E1E),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.language_rounded),
+                      color: const Color(0xFF1E1E1E),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      color: const Color(0xFFFF5722),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
 
           TitleText(text: 'Başarılarım'),
-
-          SuccessCard(), // Eğer başarılarım kısmını da ayrı card yaptıysan altına eklersin
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: SuccessCard(),
+          ),
 
           TitleText(text: 'Listelerim'),
           CardList(
             widgets: [
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'unfinisheds',
                 text: 'Yarım Bıraktıklarım',
                 icon: Icons.play_circle_outline,
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'finisheds',
                 text: 'Bitirilenler',
                 icon: Icons.check_circle_outline,
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'likeds',
                 text: 'Beğenilenler',
                 icon: Icons.favorite_outline,
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'saveds',
                 text: 'Kaydedilenler',
                 icon: Icons.bookmark_outline,
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'posts',
                 text: 'Gönderilerim',
                 icon: Icons.list_alt,
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'notes',
                 text: 'Notlarım',
                 icon: Icons.notes,

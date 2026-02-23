@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/widgets/profile_card.dart';
-import 'package:knitting_app/controllers/widgets/success_card.dart';
+import 'package:knitting_app/controllers/widgets/cards/success_card.dart';
 
 class ShareView extends StatefulWidget {
   const ShareView({super.key});
@@ -77,10 +75,23 @@ class _ShareViewState extends State<ShareView> {
                   "Koray Temizkan",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-                SizedBox(height: 5),
                 Text(
                   "@kkkkorayyyy",
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
+                  style: TextStyle(color: Colors.grey),
+                ),
+                 // İstatistikler (Beğeni, Takip, Göz)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildStatItem(Icons.favorite_border, "18"),
+                      SizedBox(width: 20),
+                      _buildStatItem(Icons.person_outline, "27"),
+                      SizedBox(width: 20),
+                      _buildStatItem(Icons.visibility_outlined, "157"),
+                    ],
+                  ),
                 ),
 
                 SuccessCard(),
@@ -184,6 +195,17 @@ class _ShareViewState extends State<ShareView> {
           ),
         ],
       ),
+    );
+  }
+
+
+  Widget _buildStatItem(IconData icon, String value) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: Colors.black87),
+        SizedBox(width: 4),
+        Text(value, style: TextStyle(fontWeight: FontWeight.w500)),
+      ],
     );
   }
 }

@@ -1,12 +1,9 @@
-// SUPABASE'DEN YERELE ÇEKİLECEK AMA SONRA YAPARIZ
-
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/url_launcher_controller.dart';
-import 'package:knitting_app/controllers/widgets/card_list.dart';
-import 'package:knitting_app/controllers/widgets/info_card.dart';
+import 'package:knitting_app/controllers/url_launcher.dart';
+import 'package:knitting_app/controllers/widgets/lists/card_list.dart';
 import 'package:knitting_app/controllers/widgets/my_gesture_button.dart';
-import 'package:knitting_app/controllers/widgets/title_text.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text.dart';
 
 class SssView extends StatefulWidget {
   const SssView({super.key});
@@ -16,29 +13,6 @@ class SssView extends StatefulWidget {
 }
 
 class _SssViewState extends State<SssView> {
-  Future<void> _showMyDialog() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Merhaba'),
-          content: Text(
-            'WhatsApp hattımıza yönlendiriliyorsunuz! Soru, öneri ve şikayetlerinizi bizlere iletebilirsiniz',
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Geri dön'),
-            ),
-            TextButton(
-              onPressed: () => openWhatsAppSupport(),
-              child: const Text('Devam et'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +27,19 @@ class _SssViewState extends State<SssView> {
           CardList(
             widgets: [
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'how_to_use',
                 text: 'Uygulama Nasıl Kullanılır',
                 icon: Icons.auto_stories_outlined, // Rehber/Okuma ikonu
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'stitch_glossary',
                 text: 'Terimler ve İkonlar',
                 icon: Icons.menu_book_outlined,
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'faq',
                 text: 'Sık Sorulan Sorular',
                 icon: Icons.question_answer_outlined,
@@ -74,16 +51,19 @@ class _SssViewState extends State<SssView> {
           CardList(
             widgets: [
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'size_tables',
                 text: 'Ölçü Tabloları',
                 icon: Icons.straighten_rounded, // Ölçü/Cetvel ikonu
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'knitting_care',
                 text: 'Örgü Bakımı',
                 icon: Icons.wash_outlined, // Yıkama/Bakım ikonu
               ),
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'knitting_tips',
                 text: 'Örgü Örerken Dikkat Edilecekler',
                 icon:
@@ -96,6 +76,7 @@ class _SssViewState extends State<SssView> {
           CardList(
             widgets: [
               MyGestureButton(
+                upperRoute: 'profile',
                 route: 'calculators',
                 text: 'Hesaplama Araçları',
                 icon: Icons.calculate_outlined, // Hesaplama ikonu

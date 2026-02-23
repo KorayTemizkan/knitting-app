@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/settings/music_controller.dart';
-import 'package:knitting_app/controllers/url_launcher_controller.dart';
-import 'package:knitting_app/controllers/widgets/card_list.dart';
+import 'package:knitting_app/controllers/music_controller.dart';
+import 'package:knitting_app/controllers/widgets/lists/card_list.dart';
 import 'package:knitting_app/controllers/widgets/my_gesture_button.dart';
-import 'package:knitting_app/controllers/widgets/title_text.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -18,30 +17,6 @@ class _SettingsViewState extends State<SettingsView> {
   double volume = MusicController().volume;
   String selectedLanguage = 'TR';
 
-  Future<void> _showMyDialog() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Merhaba'),
-          content: Text(
-            'WhatsApp hattımıza yönlendiriliyorsunuz! Soru, öneri ve şikayetlerinizi bizlere iletebilirsiniz',
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Geri dön'),
-            ),
-            TextButton(
-              onPressed: () => openWhatsAppSupport(),
-              child: const Text('Devam et'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,22 +29,26 @@ class _SettingsViewState extends State<SettingsView> {
           CardList(
             widgets: [
               MyGestureButton(
+                upperRoute: 'settings',
                 route: 'signIn',
                 text: 'Giriş Yap',
                 icon: Icons.login,
               ), // İkon güncellendi
               MyGestureButton(
+                upperRoute: 'settings',
                 route: 'register',
                 text: 'Hesap Oluştur',
                 icon: Icons.person_add,
               ),
               MyGestureButton(
-                route: 'signOut',
+                upperRoute: '',
+                route: '',
                 text: 'Çıkış Yap',
                 icon: Icons.logout,
               ),
               MyGestureButton(
-                route: 'deleteAccount',
+                upperRoute: '',
+                route: '',
                 text: 'Hesabımı Sil',
                 icon: Icons.delete_forever,
               ),
@@ -81,24 +60,30 @@ class _SettingsViewState extends State<SettingsView> {
           CardList(
             widgets: [
               MyGestureButton(
-                route: 'theme',
+                upperRoute: '',
+                route: '',
                 text: 'Tema Değiştir',
                 icon: Icons.palette_outlined,
               ), // Renk paleti tığ işi için şıktır
+
+              // Burada showMessageDialog ile bu iki şeyi halledebilirim bence, yönlendirme yapma
               MyGestureButton(
-                route: 'language',
-                text: 'Dil Seçimi',
-                icon: Icons.language,
-              ),
-              MyGestureButton(
-                route: 'notifications',
+                upperRoute: '',
+                route: '',
                 text: 'Bildirim Ayarları',
                 icon: Icons.notifications_none,
               ), // EKSİK: Bildirimler
               MyGestureButton(
-                route: 'music',
+                upperRoute: '',
+                route: '',
                 text: 'Müzik ve Ses',
                 icon: Icons.music_note,
+              ),
+               MyGestureButton(
+                upperRoute: 'settings',
+                route: 'releaseNotes',
+                text: 'Güncelleme Notları',
+                icon: Icons.update,
               ),
             ],
           ),
@@ -108,25 +93,25 @@ class _SettingsViewState extends State<SettingsView> {
           CardList(
             widgets: [
               MyGestureButton(
+                upperRoute: 'settings',
                 route: 'aboutUs',
                 text: 'Biz Kimiz?',
                 icon: Icons.info_outline,
               ),
-              MyGestureButton(
-                route: 'askUs',
-                text: 'Sıkça Sorulan Sorular',
-                icon: Icons.help_outline,
-              ), // EKSİK: SSS
-              MyGestureButton(
-                route: 'contact',
+                MyGestureButton(
+                upperRoute: 'settings',
+                route: 'aboutUs',
                 text: 'Bize Ulaşın',
                 icon: Icons.mail_outline,
               ), // EKSİK: Doğrudan iletişim
               MyGestureButton(
-                route: 'releaseNotes',
-                text: 'Güncelleme Notları',
-                icon: Icons.update,
-              ),
+                upperRoute: 'settings',
+                route: 'aboutUs',
+                text: 'Sıkça Sorulan Sorular',
+                icon: Icons.help_outline,
+              ), // EKSİK: SSS
+            
+             
             ],
           ),
 
@@ -135,18 +120,21 @@ class _SettingsViewState extends State<SettingsView> {
           CardList(
             widgets: [
               MyGestureButton(
+                upperRoute: 'settings',
                 route: 'privacyPolicy',
                 text: 'Gizlilik Politikası',
                 icon: Icons.privacy_tip_outlined,
               ), // Daha standart isim
               
               MyGestureButton(
+                upperRoute: 'settings',
                 route: 'termsOfUse',
                 text: 'Kullanım Koşulları',
                 icon: Icons.rule,
               ),
               MyGestureButton(
-                route: 'licenses',
+                upperRoute: '',
+                route: '',
                 text: 'Lisanslar',
                 icon: Icons.card_membership,
               ), // EKSİK: Flutter uygulamalarında olması gerekir

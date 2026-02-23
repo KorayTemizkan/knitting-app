@@ -1,24 +1,61 @@
+/*
+Supabase çalışma süreci:
+
+Main'de await Supabase.initialize dediğim an uygulama ile Supabase Bulut'u arasında kalıcı bir köprü kuruldu
+Uygulama kapanana kadar bu tek katman durur
+
+Giriş yapacağımız zaman supabase.auth.signInWithPassword çalışınca supabase'e istek atılır
+Bilgiler doğruysa buluttan bir session(oturum) ve JWT Token(dijital kimlik) ögeleri gönderilir
+auth.currentUser artık null olmaz. buradan erişilebilir olduk
+
+Kayıt olurken auth tablosunda yeni bir öge oluşuyor, ondan sonra trigger ile profiles tablosunda sadece
+id ve created_at özelliklerine sahip yeni bir öge oluşuyor.
+Bu profiles tablosundan da sharedpreferences'e çekim yapıyoruz
+Çünkü her şey doğru olduktan sonra çekmek daha mantıklı geldi bana
+
+Uygulamadan her çıkışta oturum kayboluyor. profili düzenle ve gönderi atma bölümleri haricinde
+herhangi bir yerde internete ihtiyacım yok. Bunu sonra düşünürüm
+
+
+*********
+
+auth.user ile public.profiles farklı tablolar olmalı, birbirlerinden ayırmak iyi bir mimari tercih
+
+*********
+
+
+
+*/
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:knitting_app/models/profile_model.dart';
-import 'package:path/path.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:knitting_app/controllers/providers/shared_preferences_provider.dart';
 
 class SupabaseProvider extends ChangeNotifier {
+  // Main'de oluşturduk, burada referans ile bağladık gibi düşün
   final SupabaseClient supabase = Supabase.instance.client;
   late SharedPreferencesProvider sharedPreferencesProvider;
 
   SupabaseProvider({required this.sharedPreferencesProvider});
 
+  // Keşfet kısmı için gerekli
   List<ProfileModel> _profiles = [];
   List<ProfileModel> get profiles => _profiles;
 
+  // Post atma kısmı için gerekli
   List<Map<String, dynamic>> posts = [];
+
+  // İnternet bağlantısı kontrolü için gerekli
   bool _internetConnectionController = false;
   bool get internetConnectionController => _internetConnectionController;
 
+  // **************************************************************************************************************
+
   // AUTH FONKSİYONLARI
+
+  // Bu fonksiyonları doğruca Supabase Flutter sitesinden aldım.
 
   Future<bool> signUpUser({
     required String email,
@@ -33,7 +70,6 @@ class SupabaseProvider extends ChangeNotifier {
       final Session? session = res.session;
       final User? user = res.user;
 
-      fetchProfile();
       return true;
     } catch (e) {
       print(e);
@@ -54,7 +90,7 @@ class SupabaseProvider extends ChangeNotifier {
       final Session? session = res.session;
       final User? user = res.user;
 
-      fetchProfile();
+      fetchProfileInfos();
 
       return true;
     } catch (e) {
@@ -85,7 +121,9 @@ class SupabaseProvider extends ChangeNotifier {
     });
   }
 
-  // PROFİL FONKSİYONLARI
+  // **************************************************************************************************************
+
+  // PROFİL EDİTLEME FONKSİYONLARI
 
   String imageUrl = '';
 
@@ -105,23 +143,29 @@ class SupabaseProvider extends ChangeNotifier {
   Future<void> updateProfile({
     required String firstName,
     required String lastName,
-    required String phone,
+    required String userName,
   }) async {
-    final response = await supabase
-        .from('profiles')
-        .update({
-          'first_name': firstName,
-          'last_name': lastName,
-          'phone': phone,
-        })
-        .eq('id', supabase.auth.currentUser!.id);
+    try {
+      final response = await supabase
+          .from('profiles')
+          .update({
+            'first_name': firstName,
+            'last_name': lastName,
+            'user_name': userName,
+          })
+          .eq('id', supabase.auth.currentUser!.id);
 
-    await sharedPreferencesProvider.setFirstName(firstName);
-    await sharedPreferencesProvider.setLastName(lastName);
-    await sharedPreferencesProvider.setPhone(phone);
+      await sharedPreferencesProvider.setFirstName(firstName);
+      await sharedPreferencesProvider.setLastName(lastName);
+      await sharedPreferencesProvider.setUserName(userName);
+    } catch (e) {
+      print(e);
+    }
   }
 
-  // DATABASE - POST FONKSİYONLARI
+  // **************************************************************************************************************
+
+  // VERİTABANINA GÖNDERİ ATMA FONKSİYONLARI
 
   Future<void> readPosts() async {
     try {
@@ -129,8 +173,7 @@ class SupabaseProvider extends ChangeNotifier {
       posts = List<Map<String, dynamic>>.from(data);
       _internetConnectionController = true;
       notifyListeners();
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   Future<void> insert({required String header, required String content}) async {
@@ -162,18 +205,22 @@ class SupabaseProvider extends ChangeNotifier {
     });
   }
 
-  // DATABASE - PROFİL FONKSİYONLARI
+  // **************************************************************************************************************
 
-  Future<void> fetchProfile() async {
+  // VERİTABANINDAN PROFİLİMİ ÇEKME FONKSİYONLARI
+
+  Future<void> fetchProfileInfos() async {
     final response = await supabase
         .from('profiles')
         .select()
         .eq('id', supabase.auth.currentUser!.id)
         .single();
 
+    await sharedPreferencesProvider.setUserName(response['user_name'] ?? '');
     await sharedPreferencesProvider.setFirstName(response['first_name'] ?? '');
     await sharedPreferencesProvider.setLastName(response['last_name'] ?? '');
     await sharedPreferencesProvider.setPhone(response['phone'] ?? '');
+    await sharedPreferencesProvider.setPhone(response['created_at'] ?? '');
   }
 
   Future<void> fetchProfiles() async {

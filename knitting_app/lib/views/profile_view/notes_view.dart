@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:knitting_app/controllers/app_bar.dart';
-import 'package:knitting_app/controllers/widgets/card_list.dart';
-import 'package:knitting_app/controllers/widgets/edit_profile.dart';
+import 'package:knitting_app/controllers/widgets/lists/card_list.dart';
 import 'package:knitting_app/controllers/widgets/segmented_tab.dart';
-import 'package:knitting_app/controllers/widgets/subtitled_info_card_with_image.dart';
-import 'package:knitting_app/controllers/widgets/take_note.dart';
-import 'package:knitting_app/controllers/widgets/title_text.dart';
+import 'package:knitting_app/controllers/widgets/cards/subtitled_info_card_with_image.dart';
+import 'package:knitting_app/controllers/widgets/cards/take_note_card.dart';
+import 'package:knitting_app/controllers/widgets/titles/title_text.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
