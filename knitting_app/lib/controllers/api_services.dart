@@ -83,6 +83,7 @@ Future<List<PatternModel>> fetchProducts() async {
   }
 }
 
+
 Future<String> fetchPrivacyPolicy() async {
   final response = await http.get(
     Uri.parse(

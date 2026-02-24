@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "title": "Amigurumi Ayıcık Yarışması",
+    "content": "Sevgi dolu bir amigurumi ayıcık tasarla ve ödülleri kap!",
+    "difficulty": "Orta",
+    "examplePhotos": [
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1",
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1",
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1"
+    ],
+    "rewards": ["+100 tigcikPoint", "BestBearAward"],
+    "dateRange": "2026-01-20 – 2026-02-05"
+  },
+  {
+    "id": 2,
+    "title": "Renkli Battaniye Challenge",
+    "content": "Kendi stilini yansıtan renkli bir mini battaniye tasarla.",
+    "difficulty": "Kolay",
+    "examplePhotos": [
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1",
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1"
+    ],
+    "rewards": ["+50 tigcikPoint", "ColorMasterBadge"],
+    "dateRange": "2026-01-25 – 2026-02-10"
+  },
+  {
+    "id": 3,
+    "title": "Örgü Aksesuar Tasarım Yarışması",
+    "content": "Pratik ve şık bir örgü aksesuar tasarla, herkesin dikkatini çek!",
+    "difficulty": "Zor",
+    "examplePhotos": [
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1",
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1",
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1",
+      "https://b3523591.smushcdn.com/3523591/wp-content/uploads/2024/08/IMG_5698-1-1024x1024.jpg?lossy=2&strip=1&avif=1"
+    ],
+    "rewards": ["+200 tigcikPoint", "AccessoryKingAward"],
+    "dateRange": "2026-02-01 – 2026-02-20"
+  }
+]
