@@ -68,7 +68,7 @@ Future<void> fetchAndSyncPatterns(SharedPreferencesProvider spProvider) async {
 Future<List<PatternModel>> fetchProducts() async {
   final response = await http.get(
     Uri.parse(
-      'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/products.json',
+      'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/patterns.json',
     ),
   );
 
@@ -82,7 +82,6 @@ Future<List<PatternModel>> fetchProducts() async {
     );
   }
 }
-
 
 Future<String> fetchPrivacyPolicy() async {
   final response = await http.get(
@@ -121,7 +120,7 @@ Future<List<ContestModel>> fetchContests() async {
 Future<List<TutorialModel>> fetchHowTos() async {
   final response = await http.get(
     Uri.parse(
-      'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/howTos.json',
+      'https://raw.githubusercontent.com/KorayTemizkan/KnittingApp/main/tutorials.json',
     ),
   );
 

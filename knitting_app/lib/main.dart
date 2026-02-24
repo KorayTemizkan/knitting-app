@@ -104,9 +104,9 @@ void main() async {
         ), // SQFlite ile olan bu ikisinini böyle çektim
         ChangeNotifierProvider(create: (_) => AiAnswersProvider()..init()),
         ChangeNotifierProvider(create: (_) => KnittingCafeProvider()),
-        //ChangeNotifierProvider(create: (_) => ReleaseNotesProvider()),
+        ChangeNotifierProvider(create: (_) => ReleaseNotesProvider()),
         ChangeNotifierProvider(create: (_) => ContestProvider()),
-        //ChangeNotifierProvider(create: (_) => PoliciesProvider()),
+        ChangeNotifierProvider(create: (_) => PoliciesProvider()),
         ChangeNotifierProvider(create: (_) => LikeProvider()),
         ChangeNotifierProvider(create: (_) => SaveProvider()),
       ],
@@ -140,10 +140,10 @@ class _MyAppState extends State<MyApp> {
 
       context.read<TutorialProvider>().loadHowTos();
       context.read<KnittingCafeProvider>().loadKnittingCafes();
-      //context.read<ReleaseNotesProvider>().loadReleaseNotes();
+      context.read<ReleaseNotesProvider>().loadReleaseNotes();
       context.read<SupabaseProvider>().fetchProfiles();
       context.read<ContestProvider>().loadContests();
-      //context.read<PoliciesProvider>().loadPrivacyPolicy();
+      context.read<PoliciesProvider>().loadPrivacyPolicy();
 
       // Uygulama açılışında zaten beğenilmiş ve kaydedilmişleri çek
       context.read<LikeProvider>().loadLikeds();
